@@ -1,3 +1,13 @@
+coses interessants: http://personales.upv.es/dginesta/docencia/posgrado/sparse.pdf
+                    https://www.mathworks.com/help/matlab/ref/sparse.html
+                    https://www.mathworks.com/help/matlab/sparse-matrices.html
+                    https://www.mathworks.com/help/matlab/ref/sparse.html
+
+
+
+
+
+
 APUNTS DE MATRIUS DISPERSES
 
 
@@ -31,4 +41,3 @@ per files i columnes
     la informació de la fila r estara entre les posicions ia[r] i ia[r+1]-1 a ico i val. excepte el cas de que ia[r] i ia[r+1] fossin iguals, cosa q significaria que la fila r esta buida
 
 
-    
