@@ -1,2 +1,0 @@
-\babel@toc {catalan}{}
-\contentsline {chapter}{\numberline {1}Qu\IeC {\`e} s\IeC {\'o}n les matrius disperses?}{3}{chapter.1}
