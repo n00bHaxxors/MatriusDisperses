@@ -1,76 +1,102 @@
 \documentclass[11pt,a4paper,twoside]{report}
-\usepackage{a4wide}
-\usepackage{epsfig}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{latexsym}
-\usepackage[utf8]{inputenc}
-\usepackage{listings}
-\usepackage{color}
-\usepackage{titlesec}    
-\usepackage{enumitem}
-\usepackage[catalan]{babel}
-\usepackage{newunicodechar}
-\usepackage{graphicx}
-\usepackage{subcaption}
-\usepackage{float}
-\newunicodechar{Ŀ}{\L.}
-\newunicodechar{ŀ}{\l.}
+  \usepackage{a4wide}
+  \usepackage{epsfig}
+  \usepackage{amsmath}
+  \usepackage{amsfonts}
+  \usepackage{latexsym}
+  \usepackage[utf8]{inputenc}
+  \usepackage{listings}
+  \usepackage{color}
+  \usepackage{titlesec}    
+  \usepackage{enumitem}
+  \usepackage[catalan]{babel}
+  \usepackage{newunicodechar}
+  \usepackage{graphicx}
+  \usepackage{subcaption}
+  \usepackage{float}
+  \newunicodechar{Ŀ}{\L.}
+  \newunicodechar{ŀ}{\l.}
+  
+  
+  % \titleformat{\chapter}
+  %   {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+  % \titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+  
+  \definecolor{dkgreen}{rgb}{0,0.6,0}
+  \definecolor{gray}{rgb}{0.5,0.5,0.5}
+  \definecolor{mauve}{rgb}{0.58,0,0.82}
+  
+  \lstset{frame=tb,
+    language=Matlab,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numbers=none,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    extendedchars=true,
+    literate={á}{{\'a}}1 {à}{{\`a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1
+  }
+  
+  
+  \usepackage{hyperref}
+  \hypersetup{
+      colorlinks=false, %set true if you want colored links
+      linktoc=all,     %set to all if you want both sections and subsections linked
+      linkcolor=blue,  %choose some color if you want links to stand out
+  }
+  
+  
+  \setlength{\footskip}{50pt}
+  \setlength{\parindent}{0cm} \setlength{\oddsidemargin}{-0.5cm} \setlength{\evensidemargin}{-0.5cm}
+  \setlength{\textwidth}{17cm} \setlength{\textheight}{23cm} \setlength{\topmargin}{-1.5cm} \addtolength{\parskip}{2ex}
+  \setlength{\headsep}{1.5cm}
+  
+  \renewcommand{\contentsname}{Continguts}
+  %\renewcommand{\chaptername}{Pr\`actica}
+  \setcounter{chapter}{0}
+  \begin{document}
+  
+  \title{Treball 1: Matrius disperses}
+  \author{Ismael El Habri, Marc Cané, Lluís Trilla}
+  \date{16 d'octubre de 2018}
+  \maketitle
+  
+  \tableofcontents
+  
+  
+  \chapter{Què són les matrius disperses?}
+  
+  Quan parlem de matrius disperses ens referim a matrius de gran tamany en la qual la majoria d'elements son zero.
+  
+  Per identificar si una matriu és dispersa, podem usar el seguent:
+  \begin{enumerate}
+    \item una matriu serà dispersa si $n \times n$ és dispersa i el número de coeficients no nuls es $n^{y+1}$, on $y < 1$.
+    \item La densitat seria $\frac{n^{y+1}}{n^2} = n^{y+1}$.
+  \end{enumerate}
+
+  Valors típics del paràmetre $y$:
+  \begin{itemize}
+    \item $y=0.2$ per problemes d'anàlisi de sistemes eléctics degeneració i de transpot d'enegía.
+    \item $y=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructues.
+  \end {itemize}
 
 
-\titleformat{\chapter}
-  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
-\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
-
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82}
-
-\lstset{frame=tb,
-  language=Matlab,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=flexible,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\tiny\color{gray},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  tabsize=3,
-  extendedchars=true,
-  literate={á}{{\'a}}1 {à}{{\`a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1
-}
+  
+  Podem trobar dos tipus de matrius disperses:
+  \begin{itemize}
+    \item \textbf{matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular. 
+    \item \textbf{matrius no estructurades:} els elements diferents de zero es distribueixen de forma irregular.
+  \end{itemize}
 
 
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=false, %set true if you want colored links
-    linktoc=all,     %set to all if you want both sections and subsections linked
-    linkcolor=blue,  %choose some color if you want links to stand out
-}
-
-
-\setlength{\footskip}{50pt}
-\setlength{\parindent}{0cm} \setlength{\oddsidemargin}{-0.5cm} \setlength{\evensidemargin}{-0.5cm}
-\setlength{\textwidth}{17cm} \setlength{\textheight}{23cm} \setlength{\topmargin}{-1.5cm} \addtolength{\parskip}{2ex}
-\setlength{\headsep}{1.5cm}
-
-\renewcommand{\contentsname}{Continguts}
-%\renewcommand{\chaptername}{Pr\`actica}
-\setcounter{chapter}{0}
-\begin{document}
-
-\title{Treball 1: Matrius disperses}
-\author{Ismael El Habri, Marc Cané, Lluís Trilla}
-\date{16 d'octubre de 2018}
-\maketitle
-
-\tableofcontents
-
-
-
-\end{document}
+  
+    
+  \end{document}
