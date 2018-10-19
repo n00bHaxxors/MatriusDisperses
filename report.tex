@@ -74,22 +74,21 @@
   
   \chapter{Què són les matrius disperses?}
   
-  Quan parlem de matrius disperses ens referim a matrius de gran tamany en la qual la majoria d'elements son zero.
+  Quan parlem de matrius disperses ens referim a matrius de gran tamany en la qual la majoria d'elements son zero. Direm que 
+  una matriu és disperrsa, quan hi hagi benefici en aplicar els mètodes propis d'aquestes. 
   
   Per identificar si una matriu és dispersa, podem usar el seguent:
-  \begin{enumerate}
-    \item una matriu serà dispersa si $n \times n$ és dispersa i el número de coeficients no nuls es $n^{y+1}$, on $y < 1$.
-    \item La densitat seria $\frac{n^{y+1}}{n^2} = n^{y+1}$.
-  \end{enumerate}
+    
+  \qquad Una matriu $n \times n$ serà dispersa si el número de coeficients no nuls es $n^{\gamma+1}$, on $\gamma < 1$.
 
-  Valors típics del paràmetre $y$:
+  En funció del poblema, decidim el valor del paràmetre $\gamma$. Aquí hi ha els valors típics de $\gamma$:
   \begin{itemize}
-    \item $y=0.2$ per problemes d'anàlisi de sistemes eléctics degeneració i de transpot d'enegía.
-    \item $y=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructues.
+    \item $\gamma=0.2$ per problemes d'anàlisi de sistemes eléctics degeneració i de transpot d'enegía.
+    \item $\gamma=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructues.
   \end {itemize}
 
 
-  
+
   Podem trobar dos tipus de matrius disperses:
   \begin{itemize}
     \item \textbf{matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular. 
