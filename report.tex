@@ -95,7 +95,27 @@
     \item \textbf{matrius no estructurades:} els elements diferents de zero es distribueixen de forma irregular.
   \end{itemize}
 
-
+  \chapter{Formes d'emmagatzemar matrius disperses}
   
-    
+  Hi ha vàries formes de guardar aquestes matrius com ara:
+  \begin{itemize}
+    \item Per coordenades. És la primera aproximació que podriem pensar i és bastant intutiva. Per cada element no nul guardar el seu valor i la seva posició en la matriu (columna i fila).
+    A la realitat però, aquest mètode d'emmagatzemar les dades és poc eficient quan hem de fer operacions amb les matrius.
+    \item Per files o columnes. 
+    Aquest mètode és similar a l'anterior però ara en comptes de guardar la fila i la columna de cada valor guardarem només una de les dos però afegirem una llista d'index per indicar el primer element de cada fila/columna. 
+    Si decidim guardar per files per exemple guardarem el valor i la columna de cada element no nul i una llista amb l'index del primer element de cada fila.
+    En cas de que tinguem una fila buida guardarem el mateix index que teniem a la fila anterior.
+    Aquest és el mètode més habitual i el que implementarem.
+    \item Per perfil. Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
+    Aprofitant la propietat d'aquestes matrius aquest mètode guarda els valors de la banda de cada fila, els index del primer element no nul de cada fila i els index del primer valor de cada banda.
+  \end{itemize}  
+  %http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
+
+  %1.  Qu`e  ́es una matriu dispersa.  Definici ́o o definicions.
+  %2.  Formes de emmagatzemar una matriu dispersa.  Implantar en Matlab les diferents formes de de fer-ho.
+  %3.  Operacions  amb  matrius  disperses.   Suma,  Producte  matriu-vector,  Producte  matriu-matriu.
+  %4.  Resoluci ́o de sistemes.  Reordenaci ́o de les matrius.
+  %5.  Poseu exemples d’aplicaci ́o de la factoritzaci ́o LU aplicada a una sistema dispers.
+  %6.  Doneu una estimaci ́o del estalvi en termes de temps de comput i espai
+
   \end{document}
