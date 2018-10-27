@@ -122,7 +122,7 @@
 	    \end{tabu}  
     \]
 	
-	\qquad Per emmagatzemar això podem usar tres vectors de la mateixa mida ($n_z$, el nombre d'elements diferents de zero): Un amb els valors, un amb les files i un amb les columnes:
+	Per emmagatzemar això podem usar tres vectors de la mateixa mida ($n_z$, el nombre d'elements diferents de zero): Un amb els valors, un amb les files i un amb les columnes:
 	\begin{center}
 		\begin{tabular}{l|c c c c c}
 			Vector & \multicolumn{5}{c}{Coeficients}\\
@@ -136,16 +136,65 @@
     
     A la realitat però, aquest mètode d'emmagatzemar les dades és poc eficient quan hem de fer operacions amb les matrius.
   
+	\section{Per files}  
+  	
+	També conegut com a \textit{Compressed Sparse Rows (CSR)}, és el mètode més estès.
+	
+	Consisteix en guardar els elements ordenats per files, guardar la columna on es troben, i la posició del primer element de cada fila en el vector de valors.
+	Així ens quedaran tres vectors:
+	\begin{itemize}
+		\item \textbf{valors:} de mida $n_z$, conté tots els valors diferents.
+		\item \textbf{columnes:} també de mida $n_z$, conté la columna on es troba cada un dels elements anteriors.
+		\item \textbf{iniFiles:} de mida $m+1$, conté la posició on comença cada fila en els vectors valors i columnes, sent $m$ el nombre de files de la matriu. 
+	\end{itemize}
+	
+	\qquad \textbf{Exemple}
+	
+	\[    
+    \begin{pmatrix}
+    	1	&	0	& 0	&	2	\\
+    	0	&	1	&	0	&	0	\\
+    	0	&	0	&	0	&	0	\\
+    	3	&	0	&	-2	&	0	\\
+    \end{pmatrix}   \qquad = \qquad
+	\begin{tabu}{l|c c c c c}
+			$Vector$ & \multicolumn{5}{c}{$Coeficients$}\\
+			\hline
+			$índex$			&	0	&	1	&	2	&	3	&	4	\\
+			\hline
+			$valors$			&	1	&	2	&	1 &	1	&	-2	\\
+			$columnes$	&	0	&	3	&	1	&	0	&	2	\\ 	
+			$iniFiles$			& 0	&	2	&	3	& & \\
+	\end{tabu}		\]
+
+	Si es canvien files per columnes, dona la implementació per columnes, o també anomenada \textit{Compressed Sparse Columns (CSC)}.
+	
+	\subsection{Implementació del mètode CSR}
+	
+	Aquí va la implementació i tot el relacionat
+	
+	
+	
+	\section{Per perfil}
+	
+	adfasdfasdfasdf
+	
+	\begin{tabbing}
+	asdfasdfas
+	\end{tabbing}
+  
+  
+  
+  
+  
+  
+  
+  
+  \textbf{TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP}
+  
   %% es borrara
   Hi ha vàries formes de guardar aquestes matrius com ara:
   \begin{itemize}
-    \item \textbf{Per coordenades.} És la primera aproximació que podriem pensar i és bastant intutiva. Per cada element no nul guardar el seu valor i la seva posició en la matriu (columna i fila).
-    A la realitat però, aquest mètode d'emmagatzemar les dades és poc eficient quan hem de fer operacions amb les matrius.
-    \item \textbf{Per files o columnes.} % tb es coneix com a Compressed sparse Rows (CSR) lequivalent pero amb columnes, es diu CSC
-    Aquest mètode és similar a l'anterior però ara en comptes de guardar la fila i la columna de cada valor guardarem només una de les dos però afegirem una llista d'index per indicar el primer element de cada fila/columna. 
-    Si decidim guardar per files per exemple guardarem el valor i la columna de cada element no nul i una llista amb l'index del primer element de cada fila.
-    En cas de que tinguem una fila buida guardarem el mateix index que teniem a la fila anterior.
-    Aquest és el mètode més habitual i el que implementarem.
     \item \textbf{Per perfil.} %També conegut com a esquema diagonal
      Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
     Aprofitant la propietat d'aquestes matrius aquest mètode guarda els valors de la banda de cada fila, els index del primer element no nul de cada fila i els index del primer valor de cada banda.
