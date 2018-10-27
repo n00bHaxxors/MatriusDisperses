@@ -92,7 +92,7 @@
 
   Podem trobar dos tipus de matrius disperses:
   \begin{itemize}
-    \item \textbf{Matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular.
+    \item \textbf{Matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular. Exemple: Les matrius banda.
     \item \textbf{Matrius no estructurades:} els elements diferents de zero es distribueixen de forma irregular.
   \end{itemize}
 
@@ -102,7 +102,7 @@
   
     És la primera aproximació que podriem pensar i és bastant intutiva. Per cada element no nul guardem una tupla amb el valor i les seves coordenades: $(a_{i j}, i, j)$. 
     
-    \qquad \textbf{Exemple}
+    \subsection{Exemple}
 	\[    
     \begin{pmatrix}
     	1	&	0	& 0	&	2	\\
@@ -148,7 +148,7 @@
 		\item \textbf{iniFiles:} de mida $m+1$, conté la posició on comença cada fila en els vectors valors i columnes, sent $m$ el nombre de files de la matriu. 
 	\end{itemize}
 	
-	\qquad \textbf{Exemple}
+	\subsection{Exemple}
 	
 	\[    
     \begin{pmatrix}
@@ -177,28 +177,61 @@
 	
 	\section{Per perfil}
 	
-	adfasdfasdfasdf
+	 
+	 Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
+	 
+	\subsection{Matrius banda}	 
 	
-	\begin{tabbing}
-	asdfasdfas
-	\end{tabbing}
+	Com vam veure a classe, 
+	una matriu $n \times n$ és banda si existeixen $p$ i $q$ naturals, tals que $1< p, q < n$  i $a_{i j} = 0$ sempre que $p \leq j - i$ o $q \leq i-j$. 
+	
+	Anomenem ample de banda de la matriu a $p + q - 1$.
+	
+	L'\textbf{envoltant} de una matriu banda consisteix en tots els elements de cada fila des de el primer no nul fins al ultim no nul, incloent els elements nuls que hi pugui haver entre mig.  Aquí la definició formal:
+	
+	L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) = \{i, j\} : f_i \leq j \leq l_i, 1 \leq i \leq n $ 
+	
+	on $f_i$ és on comencen els valors no nuls en la fila i, i $l_i$ on acaben els valors no nul en la fila i.
+	
+	
+
+	 \subsection{El mètode}
+	 
+	 Consisteix en guardar els elements de l'envoltant de la matriu, la columna on comença l'envoltant en cada fila, i la posició en el vector de valors on comença cada fila.
+	 
+	Doncs, ens quedarien tres vectors:
+	\begin{itemize}
+		\item \textbf{valors:} amb els valors de l'envoltant.
+		\item \textbf{columnInici:} amb el valor $f_i$ de cada fila (la columna on comença l'envoltant en cada fila.
+		\item \textbf{iniFiles:} amb la posició on comença cada fila en el vector valors.
+	\end{itemize}		 
+	
+	\subsection{Exemple}
+	 
+	 \[
+	 	\begin{pmatrix}
+  		  	1	&	2	& 0	&	0	\\
+  		  	0	&	1	&	0	&	0	\\
+   		 	0	&	2	&	0	&	2	\\
+    		0	&	0	&	0	&	-2	\\
+    \end{pmatrix}	 	\qquad = \qquad
+    \begin{tabu}{l|c c c c c c c}
+			$Vector$ & \multicolumn{7}{c}{$Coeficients$}\\
+			\hline
+			$índex$			&	0	&	1	&	2	&	3	&	4	&	5	&	6	\\
+			\hline
+			$valors$			&	1	&	2	&	1 &	2	&	0	&	2	&	-2	\\
+			$columnInici$	&	0	&	1	&	1	&	3	&		\\ 	
+			$iniFiles$			& 0	&	2	&	3	&	6 \\
+	\end{tabu}    
+	 \]
   
   
   
   
   
   
-  
-  
-  \textbf{TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP}
-  
-  %% es borrara
-  Hi ha vàries formes de guardar aquestes matrius com ara:
-  \begin{itemize}
-    \item \textbf{Per perfil.} %També conegut com a esquema diagonal
-     Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
-    Aprofitant la propietat d'aquestes matrius aquest mètode guarda els valors de la banda de cada fila, els index del primer element no nul de cada fila i els index del primer valor de cada banda.
-  \end{itemize}  
+
   %http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
 
   %1.  Qu`e  ́es una matriu dispersa.  Definici ́o o definicions.
