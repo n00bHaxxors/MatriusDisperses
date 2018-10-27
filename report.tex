@@ -2,6 +2,7 @@
   \usepackage{a4wide}
   \usepackage{epsfig}
   \usepackage{amsmath}
+  \usepackage{tabu}
   \usepackage{amsfonts}
   \usepackage{latexsym}
   \usepackage[utf8]{inputenc}
@@ -91,22 +92,62 @@
 
   Podem trobar dos tipus de matrius disperses:
   \begin{itemize}
-    \item \textbf{matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular. 
-    \item \textbf{matrius no estructurades:} els elements diferents de zero es distribueixen de forma irregular.
+    \item \textbf{Matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular.
+    \item \textbf{Matrius no estructurades:} els elements diferents de zero es distribueixen de forma irregular.
   \end{itemize}
 
   \chapter{Formes d'emmagatzemar matrius disperses}
   
+  \section{Per Coordenades}
+  
+    És la primera aproximació que podriem pensar i és bastant intutiva. Per cada element no nul guardem una tupla amb el valor i les seves coordenades: $(a_{i j}, i, j)$. 
+    
+    \qquad \textbf{Exemple}
+	\[    
+    \begin{pmatrix}
+    	1	&	0	& 0	&	2	\\
+    	0	&	1	&	0	&	0	\\
+    	0	&	0	&	0	&	0	\\
+    	3	&	0	&	-2	&	0	\\
+    \end{pmatrix}   
+    \qquad = \qquad
+	    \begin{tabu}{l|c}
+	    	$índex$	&	$tupla$ (a_{i j}, i, j)	\\
+	    	\hline
+	    	0	&	(1, 0, 0) \\
+	    	1	&	(2, 0, 3) \\
+	    	2	& (1, 1, 1) \\
+	    	3	& (1, 3, 0) \\
+	    	4	& (-2, 3,2)	\\ 
+	    \end{tabu}  
+    \]
+	
+	\qquad Per emmagatzemar això podem usar tres vectors de la mateixa mida ($n_z$, el nombre d'elements diferents de zero): Un amb els valors, un amb les files i un amb les columnes:
+	\begin{center}
+		\begin{tabular}{l|c c c c c}
+			Vector & \multicolumn{5}{c}{Coeficients}\\
+			\hline
+			valors			&	1	&	2	&	1 &	1	&	-2	\\
+			files				&	0	&	0	&	1	&	3	&	3	\\
+			columnes	&	0	&	3	&	1	&	0	&	2	\\ 	
+		\end{tabular}	
+	\end{center}
+	
+    
+    A la realitat però, aquest mètode d'emmagatzemar les dades és poc eficient quan hem de fer operacions amb les matrius.
+  
+  %% es borrara
   Hi ha vàries formes de guardar aquestes matrius com ara:
   \begin{itemize}
-    \item Per coordenades. És la primera aproximació que podriem pensar i és bastant intutiva. Per cada element no nul guardar el seu valor i la seva posició en la matriu (columna i fila).
+    \item \textbf{Per coordenades.} És la primera aproximació que podriem pensar i és bastant intutiva. Per cada element no nul guardar el seu valor i la seva posició en la matriu (columna i fila).
     A la realitat però, aquest mètode d'emmagatzemar les dades és poc eficient quan hem de fer operacions amb les matrius.
-    \item Per files o columnes. 
+    \item \textbf{Per files o columnes.} % tb es coneix com a Compressed sparse Rows (CSR) lequivalent pero amb columnes, es diu CSC
     Aquest mètode és similar a l'anterior però ara en comptes de guardar la fila i la columna de cada valor guardarem només una de les dos però afegirem una llista d'index per indicar el primer element de cada fila/columna. 
     Si decidim guardar per files per exemple guardarem el valor i la columna de cada element no nul i una llista amb l'index del primer element de cada fila.
     En cas de que tinguem una fila buida guardarem el mateix index que teniem a la fila anterior.
     Aquest és el mètode més habitual i el que implementarem.
-    \item Per perfil. Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
+    \item \textbf{Per perfil.} %També conegut com a esquema diagonal
+     Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
     Aprofitant la propietat d'aquestes matrius aquest mètode guarda els valors de la banda de cada fila, els index del primer element no nul de cada fila i els index del primer valor de cada banda.
   \end{itemize}  
   %http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
