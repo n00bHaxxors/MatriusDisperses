@@ -202,12 +202,12 @@ Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivia
 
 \subsubsection{Mètodes per obtenir una fila, una columna i un element}
 
-El mètode per obtenir una fila es troba a partir de la línia 6 del \hyperref[sec:codi1]{codi} posterior. Com podem veure consisteix en primer crear una fila amb \texttt{Matrix.nColumns} zeros.
+El mètode per obtenir una fila es troba a partir de la línia 6 del codi posterior. Com podem veure consisteix en primer crear una fila amb \texttt{Matrix.nColumns} zeros.
 Llavors, sabent que \texttt{Matrix.beginningRow[i]} ens indica on comença la fila i en el vector de valors i en el de columnes, i deduint que acaben a \texttt{Matrix.beginningRow[i+1]-1}; podem delimitar els elements de la fila. Només quedaria afegir aquests elements a les seves posicions corresponents (usant el vector de columnes).
 
-El mètode per obtenir un element es troba a partir de la línia 22 del \hyperref[sec:codi1]{codi} posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
+El mètode per obtenir un element es troba a partir de la línia 22 del codi posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
 
-El mètode per obtenir una columna es troba a partir de la línia 32 del \hyperref[sec:codi1]{codi} posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow} té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.
+El mètode per obtenir una columna es troba a partir de la línia 32 del codi posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow} té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.
 
 \paragraph*{Script Matlab} \mbox{} \\
 
