@@ -19,313 +19,312 @@
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
   
-  \newunicodechar{Ŀ}{\L.}
-  \newunicodechar{ŀ}{\l.}
-  
-  
-  % \titleformat{\chapter}
-  %   {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
-  % \titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
-  
-  \definecolor{dkgreen}{rgb}{0,0.6,0}
-  \definecolor{gray}{rgb}{0.5,0.5,0.5}
-  \definecolor{mauve}{rgb}{0.58,0,0.82}
-  
-  \lstset{frame=tb,
-    language=Matlab,
-    aboveskip=3mm,
-    belowskip=3mm,
-    showstringspaces=false,
-    columns=flexible,
-    basicstyle={\small\ttfamily},
-    numbers=none,
-    numberstyle=\tiny\color{gray},
-    keywordstyle=\color{blue},
-    commentstyle=\color{dkgreen},
-    stringstyle=\color{mauve},
-    breaklines=true,
-    breakatwhitespace=true,
-    tabsize=3,
-    extendedchars=true,
-	literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ï}{{\"i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1 {ü}{{\"u}}1 {ç}{{\c{c}}}1
-				{Á}{{\'A}}1 {À}{{\`A}}1 {Ã}{{\~A}}1 {É}{{\'E}}1 {È}{{\`E}}1 {Í}{{\'I}}1 {Ï}{{\"I}}1 {Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ú}{{\'U}}1 {Ü}{{\"U}}1 {Ç}{{\c{C}}}1
-  }
-  
-  
-  \usepackage{hyperref}
-  \hypersetup{
-      colorlinks=false, %set true if you want colored links
-      linktoc=all,     %set to all if you want both sections and subsections linked
-      linkcolor=blue,  %choose some color if you want links to stand out
-  }
-  
-  
-  \setlength{\footskip}{50pt}
-  \setlength{\parindent}{0cm} \setlength{\oddsidemargin}{-0.5cm} \setlength{\evensidemargin}{-0.5cm}
-  \setlength{\textwidth}{17cm} \setlength{\textheight}{23cm} \setlength{\topmargin}{-1.5cm} \addtolength{\parskip}{2ex}
-  \setlength{\headsep}{1.5cm}
-  
-  \renewcommand{\contentsname}{Continguts}
-  %\renewcommand{\chaptername}{Pr\`actica}
-  \setcounter{chapter}{0}
-  \begin{document}
-  
-  \title{Treball 1: Matrius disperses}
-  \author{Ismael El Habri, Marc Cané, Lluís Trilla}
-  \date{16 d'octubre de 2018}
-  \maketitle
-  
-  \tableofcontents
-  
-  
-  \chapter{Què són les matrius disperses?}
-  
-  Quan parlem de matrius disperses ens referim a matrius de gran tamany en la qual la majoria d'elements son zero. Direm que 
-  una matriu és disperrsa, quan hi hagi benefici en aplicar els mètodes propis d'aquestes. 
-  
-  Per identificar si una matriu és dispersa, podem usar el seguent:
-    
-  \qquad Una matriu $n \times n$ serà dispersa si el número de coeficients no nuls es $n^{\gamma+1}$, on $\gamma < 1$.
-
-  En funció del poblema, decidim el valor del paràmetre $\gamma$. Aquí hi ha els valors típics de $\gamma$:
-  \begin{itemize}
-    \item $\gamma=0.2$ per problemes d'anàlisi de sistemes eléctics degeneració i de transpot d'enegía.
-    \item $\gamma=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructues.
-  \end {itemize}
+\newunicodechar{Ŀ}{\L.}
+\newunicodechar{ŀ}{\l.}
 
 
+% \titleformat{\chapter}
+%   {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+% \titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
 
-  Podem trobar dos tipus de matrius disperses:
-  \begin{itemize}
-    \item \textbf{Matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular. Exemple: Les matrius banda.
-    \item \textbf{Matrius no estructurades:} els elements diferents de zero es distribueixen de forma irregular.
-  \end{itemize}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
 
-  \chapter{Formes d'emmagatzemar matrius disperses}
-  
-  \section{Per Coordenades}
-  
-    És la primera aproximació que podríem pensar i és bastant intuïtiva. Per cada element no nul guardem una tupla amb el valor i les seves coordenades: $(a_{i j}, i, j)$. 
-    
-    \subsection{Exemple}
-	\[    
-    \begin{pmatrix}
-    	1	&	0	& 0	&	2	\\
-    	0	&	1	&	0	&	0	\\
-    	0	&	0	&	0	&	0	\\
-    	3	&	0	&	-2	&	0	\\
-    \end{pmatrix}   
-    \qquad = \qquad
-	    \begin{tabu}{l|c}
-	    	$índex$	&	$tupla$ (a_{i j}, i, j)	\\
-	    	\hline
-	    	0	&	(1, 1, 1) \\
-	    	1	&	(2, 1, 4) \\
-	    	2	& (1, 2, 2) \\
-	    	3	& (3, 4, 1) \\
-	    	4	& (-2, 4,3)	\\ 
-	    \end{tabu}  
-    \]
-	
-	Per emmagatzemar això podem usar tres vectors de la mateixa mida ($n_z$, el nombre d'elements diferents de zero): Un amb els valors, un amb les files i un amb les columnes:
-	\begin{center}
-		\begin{tabular}{l|c c c c c}
-			Vector & \multicolumn{5}{c}{Coeficients}\\
-			\hline
-			valors			&	1	&	2	&	1 &	3	&	-2	\\
-			files				&	1	&	1	&	2	&	4	&	4	\\
-			columnes	&	1	&	4	&	2	&	1	&	3	\\ 	
-		\end{tabular}	
-	\end{center}
-	
-    
-    A la realitat però, aquest mètode d'emmagatzemar les dades és poc eficient quan hem de fer operacions amb les matrius.
-  
-	\section{Per files}  
-  	
-	També conegut com a \textit{Compressed Sparse Rows (CSR)}, \textit{Compressed Row Storage (CRS)}, o format \textit{Yale}. És el mètode més estès.
-	
-	Consisteix en guardar els elements ordenats per files, guardar la columna on es troben, i la posició del primer element de cada fila en el vector de valors.
-	Així ens quedaran tres vectors:
-	\begin{itemize}
-		\item \textbf{valors:} de mida $n_z$, conté tots els valors diferents.
-		\item \textbf{columnes:} també de mida $n_z$, conté la columna on es troba cada un dels elements anteriors.
-		\item \textbf{iniFiles:} de mida $m+1$, conté la posició on comença cada fila en els vectors valors i columnes, sent $m$ el nombre de files de la matriu. 
-	\end{itemize}
-	
-	\subsection{Exemple}
-	
-	\[    
-    \begin{pmatrix}
-    	1	&	0	& 0	&	2	\\
-    	0	&	1	&	0	&	0	\\
-    	0	&	0	&	0	&	0	\\
-    	3	&	0	&	-2	&	0	\\
-    \end{pmatrix}   \qquad = \qquad
-	\begin{tabu}{l|c c c c c}
-			$Vector$ & \multicolumn{5}{c}{$Coeficients$}\\
-			\hline
-			$índex$			&	1	&	2	&	3	&	4	&	5	\\
-			\hline
-			$valors$			&	1	&	2	&	1 &	3	&	-2	\\
-			$columnes$	&	1	&	4	&	2	&	1	&	3	\\ 	
-			$iniFiles$			& 1	&	3	&	4	&	4 &	6 \\
-	\end{tabu}		\]
+\lstset{frame=tb,
+language=Matlab,
+aboveskip=3mm,
+belowskip=3mm,
+showstringspaces=false,
+columns=flexible,
+basicstyle={\small\ttfamily},
+numbers=none,
+numberstyle=\tiny\color{gray},
+keywordstyle=\color{blue},
+commentstyle=\color{dkgreen},
+stringstyle=\color{mauve},
+breaklines=true,
+breakatwhitespace=true,
+tabsize=3,
+extendedchars=true,
+literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ï}{{\"i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1 {ü}{{\"u}}1 {ç}{{\c{c}}}1
+			{Á}{{\'A}}1 {À}{{\`A}}1 {Ã}{{\~A}}1 {É}{{\'E}}1 {È}{{\`E}}1 {Í}{{\'I}}1 {Ï}{{\"I}}1 {Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ú}{{\'U}}1 {Ü}{{\"U}}1 {Ç}{{\c{C}}}1
+}
 
-	Si es canvien files per columnes, dona la implementació per columnes, o també anomenada \textit{Compressed Sparse Columns (CSC)}.
-	
-	\subsection{Implementació del mètode CSR}
-	
-	Hem implementat un script Matlab amb una classe \texttt{CSRSparseMatrix} que guardi les dades necessàries. Aquestes les tenim en ``l'atribut"\texttt{ Matrix} dins del bloc \texttt{properties} (línia 10 del codi següent). Aquestes dades consisteixen en el següent:	
-	\begin{itemize}
-	\item  \texttt{Matrix.nColumns}: número de columnes de la matriu, necessari per recrear les files posteriorment.
-	\item  \texttt{Matrix.values}: vector valors comentat anteriorment, amb els valors no nuls de la matriu.
-	\item  \texttt{Matrix.columns}: vector de columnes, amb la columna corresponent a cada valor amb el mateix índex.
-	\item  \texttt{Matrix.beginningRow}: vector amb els índex comença cada fila en el vector de valors i de columnes.
-	\end{itemize}
-	
-	\paragraph*{Script Matlab}\mbox{}\\
-	
-	\lstinputlisting[style=Matlab-editor]{report_src/class.m}
-	
-	\subsubsection{Constructor}
-	\label{sec:Constructor}
-	Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
-	\begin{itemize}
-	\item \texttt{Matrix.beginningRow[1] = 0}.
-	\item \texttt{Matrix.beginningRow[i] = Matrix.beginningRow[i-1]} + elements diferents de zero en la fila i.
-	\end{itemize}
-	
-	\paragraph*{Script Matlab} \mbox{} \\
-	
-	\lstinputlisting[style=Matlab-editor]{report_src/constructor.m}
-	
-	\subsubsection{Mètodes per obtenir una fila, una columna i un element}
-	
-	El mètode per obtenir una fila es troba a partir de la línia 6 del \hyperref[sec:codi1]{codi} posterior. Com podem veure consisteix en primer crear una fila amb \texttt{Matrix.nColumns} zeros.
-	Llavors, sabent que \texttt{Matrix.beginningRow[i]} ens indica on comença la fila i en el vector de valors i en el de columnes, i deduint que acaben a \texttt{Matrix.beginningRow[i+1]-1}; podem delimitar els elements de la fila. Només quedaria afegir aquests elements a les seves posicions corresponents (usant el vector de columnes).
-	
-	El mètode per obtenir un element es troba a partir de la línia 22 del \hyperref[sec:codi1]{codi} posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
-	
-	El mètode per obtenir una columna es troba a partir de la línia 32 del \hyperref[sec:codi1]{codi} posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow} té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.
-	
-	\paragraph*{Script Matlab} \mbox{} \\
-	
-	\lstinputlisting[style=Matlab-editor]{report_src/getters.m}
-	
-	
-	\section{Per perfil}
-	
-	 
-	 Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
-	 
-	\subsection{Matrius banda}	 
-	
-	Com vam veure a classe, 
-	una matriu $n \times n$ és banda si existeixen $p$ i $q$ naturals, tals que $1< p, q < n$  i $a_{i j} = 0$ sempre que $p \leq j - i$ o $q \leq i-j$. 
-	
-	Anomenem ample de banda de la matriu a $p + q - 1$.
-	
-	L'\textbf{envoltant} de una matriu banda consisteix en tots els elements de cada fila des de el primer no nul fins al ultim no nul, incloent els elements nuls que hi pugui haver entre mig.  Aquí la definició formal:
-	
-	L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) = \{i, j\} : f_i \leq j \leq l_i, 1 \leq i \leq n $ on $f_i$ és on comencen els valors no nuls de la fila i, i $l_i$ on acaben els valors no nuls de la fila i.
-	
-	
 
-	 \subsection{El mètode}
-	 
-	 Consisteix en guardar els elements de l'envoltant de la matriu, la columna on comença l'envoltant en cada fila, i la posició en el vector de valors on comença cada fila.
-	 
-	Doncs, ens quedarien tres vectors:
-	\begin{itemize}
-		\item \textbf{valors:} amb els valors de l'envoltant.
-		\item \textbf{columnInici:} amb el valor $f_i$ de cada fila (la columna on comença l'envoltant en cada fila.
-		\item \textbf{iniFiles:} amb la posició on comença cada fila en el vector valors.
-	\end{itemize}		 
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=false, %set true if you want colored links
+  linktoc=all,     %set to all if you want both sections and subsections linked
+  linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+
+\setlength{\footskip}{50pt}
+\setlength{\parindent}{0cm} \setlength{\oddsidemargin}{-0.5cm} \setlength{\evensidemargin}{-0.5cm}
+\setlength{\textwidth}{17cm} \setlength{\textheight}{23cm} \setlength{\topmargin}{-1.5cm} \addtolength{\parskip}{2ex}
+\setlength{\headsep}{1.5cm}
+
+\renewcommand{\contentsname}{Continguts}
+%\renewcommand{\chaptername}{Pr\`actica}
+\setcounter{chapter}{0}
+\begin{document}
+
+\title{Treball 1: Matrius disperses}
+\author{Ismael El Habri, Marc Cané, Lluís Trilla}
+\date{16 d'octubre de 2018}
+\maketitle
+
+\tableofcontents
+
+
+\chapter{Què són les matrius disperses?}
+
+Quan parlem de matrius disperses ens referim a matrius de gran tamany en la qual la majoria d'elements son zero. Direm que 
+una matriu és disperrsa, quan hi hagi benefici en aplicar els mètodes propis d'aquestes. 
+
+Per identificar si una matriu és dispersa, podem usar el seguent:
+
+\qquad Una matriu $n \times n$ serà dispersa si el número de coeficients no nuls es $n^{\gamma+1}$, on $\gamma < 1$.
+
+En funció del poblema, decidim el valor del paràmetre $\gamma$. Aquí hi ha els valors típics de $\gamma$:
+\begin{itemize}
+\item $\gamma=0.2$ per problemes d'anàlisi de sistemes eléctics degeneració i de transpot d'enegía.
+\item $\gamma=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructues.
+\end {itemize}
+
+
+
+Podem trobar dos tipus de matrius disperses:
+\begin{itemize}
+\item \textbf{Matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular. Exemple: Les matrius banda.
+\item \textbf{Matrius no estructurades:} els elements diferents de zero es distribueixen de forma irregular.
+\end{itemize}
+
+\chapter{Formes d'emmagatzemar matrius disperses}
+
+\section{Per Coordenades}
+
+És la primera aproximació que podríem pensar i és bastant intuïtiva. Per cada element no nul guardem una tupla amb el valor i les seves coordenades: $(a_{i j}, i, j)$. 
+
+\subsection{Exemple}
+\[    
+\begin{pmatrix}
+	1	&	0	& 0	&	2	\\
+	0	&	1	&	0	&	0	\\
+	0	&	0	&	0	&	0	\\
+	3	&	0	&	-2	&	0	\\
+\end{pmatrix}   
+\qquad = \qquad
+    \begin{tabu}{l|c}
+    	$índex$	&	$tupla$ (a_{i j}, i, j)	\\
+    	\hline
+    	0	&	(1, 1, 1) \\
+    	1	&	(2, 1, 4) \\
+    	2	& (1, 2, 2) \\
+    	3	& (3, 4, 1) \\
+    	4	& (-2, 4,3)	\\ 
+    \end{tabu}  
+\]
+
+Per emmagatzemar això podem usar tres vectors de la mateixa mida ($n_z$, el nombre d'elements diferents de zero): Un amb els valors, un amb les files i un amb les columnes:
+\begin{center}
+	\begin{tabular}{l|c c c c c}
+		Vector & \multicolumn{5}{c}{Coeficients}\\
+		\hline
+		valors			&	1	&	2	&	1 &	3	&	-2	\\
+		files				&	1	&	1	&	2	&	4	&	4	\\
+		columnes	&	1	&	4	&	2	&	1	&	3	\\ 	
+	\end{tabular}	
+\end{center}
+
+
+A la realitat però, aquest mètode d'emmagatzemar les dades és poc eficient quan hem de fer operacions amb les matrius.
+
+\section{Per files}  
 	
-	\subsection{Exemple}
-	 
-	 \[
-	 	\begin{pmatrix}
-  		  	1	&	2	& 0	&	0	\\
-  		  	0	&	1	&	0	&	0	\\
-   		 	0	&	2	&	0	&	2	\\
-    		0	&	0	&	0	&	-2	\\
-    \end{pmatrix}	 	\qquad = \qquad
-    \begin{tabu}{l|c c c c c c c}
-			$Vector$ & \multicolumn{7}{c}{$Coeficients$}\\
-			\hline
-			$índex$			&	1	&	2	&	3	&	4	&	5	&	6	&	7	\\
-			\hline
-			$valors$			&	1	&	2	&	1 &	2	&	0	&	2	&	-2	\\
-			$columnInici$	&	1	&	2	&	2	&	4	&		\\ 	
-			$iniFiles$			& 1	&	3	&	4	&	7 \\
-	\end{tabu}    
-	 \]
-	 
-	 \section{Altres mètodes}
-	 
-	 \subsection{Diccionari de claus}
-	 
-	 Conegut també com a \textit{Dictionary of Keys (DOK)}, consisteix en tenir un diccionari que mapeja parelles de (fila, columna) amb el valor de cada element. Els elements que no estan en el diccionari es poden considerar zero. 
-	 Aquest mètode es bo per construir la matriu de manera incremental en un ordre aleatori, però es dolent al iterar pels elements diferents de zero en un ordre lexicogràfic. El seu ús més habitual es usar aquest format per construir la matriu, per després convertir-la en un format més eficient de processar.
-	 
-	 \subsection{Llista de llistes}
-  
-  Guarda una llista per fila, en la qual cada entrada és una parella de valors (valor, columna). S'acostumen a ordenar per número de columna per motius d'eficiència. Aquest mètode també es bo per construir la matriu de forma incremental.
-  
-  \subsection{Esquema DIA}
-  
-  Aquest esquema s'usa quan els valors no nuls estan restringits a un reduït nombre de diagonals. Consisteix en guardar una matriu de dades que conté els valors no nuls i un vector amb els \textit{offsets}, que guarda el desplaçament de cada diagonal respecte la diagonal principal.\newline
-  A la diagonal principal li correspon l'\textit{offset} 0. A les diagonals superiors, els hi assignem valors positius; a les inferiors, valors negatius.
-  
-  \subsubsection*{Exemple}
-	
-	Donada la matriu:
-	 \[
-	 	\begin{pmatrix}
-  		  	1	&	7	& 0	&	0	\\
-  		  	0	&	2	&	8	&	0	\\
-   		 	5	&	0	&	3	&	9	\\
-    		0	&	6	&	0	&	4	\\
-    \end{pmatrix} \]
-    
-    Necessitaríem guardar el següent:
-     
-      \[ dat = 
-	 	\begin{pmatrix}
-  		  	*	&	1	& 7	\\
-  		  	*	&	2	&	8	\\
-   		 	5	&	3	&	9	\\
-    		6	&	4	&	*	\\
-    \end{pmatrix} , off = (-2, 0, 1)    
-     \] 
-  
-  \chapter{Operacions amb matrius disperses emmagatzemades per files}
+També conegut com a \textit{Compressed Sparse Rows (CSR)}, \textit{Compressed Row Storage (CRS)}, o format \textit{Yale}. És el mètode més estès.
 
-  \section{Mètode per afegir una fila a una matriu dispersa}
-  
-  Aquest mètode està pensat per construir les matrius de forma incremental, cosa que ens serà molt útil per fer les operacions posteriors.
-  
-  El mètode en sí consisteix en fer exactament el mateix que fa el \hyperref[sec:Constructor]{constructor} per cada fila, per la donada per paràmetre en el mètode. 
-  
-  \paragraph*{Script Matlab} \mbox{} \\
-	
-	\lstinputlisting[style=Matlab-editor]{report_src/addRow.m}
-  
-  
-  
-  
-  
-  
+Consisteix en guardar els elements ordenats per files, guardar la columna on es troben, i la posició del primer element de cada fila en el vector de valors.
+Així ens quedaran tres vectors:
+\begin{itemize}
+	\item \textbf{valors:} de mida $n_z$, conté tots els valors diferents.
+	\item \textbf{columnes:} també de mida $n_z$, conté la columna on es troba cada un dels elements anteriors.
+	\item \textbf{iniFiles:} de mida $m+1$, conté la posició on comença cada fila en els vectors valors i columnes, sent $m$ el nombre de files de la matriu. 
+\end{itemize}
 
-  %http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
+\subsection{Exemple}
 
-  %1.  Qu`e  ́es una matriu dispersa.  Definici ́o o definicions.
-  %2.  Formes de emmagatzemar una matriu dispersa.  Implantar en Matlab les diferents formes de de fer-ho.
-  %3.  Operacions  amb  matrius  disperses.   Suma,  Producte  matriu-vector,  Producte  matriu-matriu.
-  %4.  Resoluci ́o de sistemes.  Reordenaci ́o de les matrius.
-  %5.  Poseu exemples d’aplicaci ́o de la factoritzaci ́o LU aplicada a una sistema dispers.
-  %6.  Doneu una estimaci ́o del estalvi en termes de temps de comput i espai
+\[    
+\begin{pmatrix}
+	1	&	0	& 0	&	2	\\
+	0	&	1	&	0	&	0	\\
+	0	&	0	&	0	&	0	\\
+	3	&	0	&	-2	&	0	\\
+\end{pmatrix}   \qquad = \qquad
+\begin{tabu}{l|c c c c c}
+		$Vector$ & \multicolumn{5}{c}{$Coeficients$}\\
+		\hline
+		$índex$			&	1	&	2	&	3	&	4	&	5	\\
+		\hline
+		$valors$			&	1	&	2	&	1 &	3	&	-2	\\
+		$columnes$	&	1	&	4	&	2	&	1	&	3	\\ 	
+		$iniFiles$			& 1	&	3	&	4	&	4 &	6 \\
+\end{tabu}		\]
 
-  \end{document}
+Si es canvien files per columnes, dona la implementació per columnes, o també anomenada \textit{Compressed Sparse Columns (CSC)}.
+
+\subsection{Implementació del mètode CSR}
+
+Hem implementat un script Matlab amb una classe \texttt{CSRSparseMatrix} que guardi les dades necessàries. Aquestes les tenim en ``l'atribut"\texttt{ Matrix} dins del bloc \texttt{properties} (línia 10 del codi següent). Aquestes dades consisteixen en el següent:	
+\begin{itemize}
+\item  \texttt{Matrix.nColumns}: número de columnes de la matriu, necessari per recrear les files posteriorment.
+\item  \texttt{Matrix.values}: vector valors comentat anteriorment, amb els valors no nuls de la matriu.
+\item  \texttt{Matrix.columns}: vector de columnes, amb la columna corresponent a cada valor amb el mateix índex.
+\item  \texttt{Matrix.beginningRow}: vector amb els índex comença cada fila en el vector de valors i de columnes.
+\end{itemize}
+
+\paragraph*{Script Matlab}\mbox{}\\
+
+\lstinputlisting[style=Matlab-editor]{report_src/class.m}
+
+\subsubsection{Constructor}
+\label{sec:Constructor}
+Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
+\begin{itemize}
+\item \texttt{Matrix.beginningRow[1] = 0}.
+\item \texttt{Matrix.beginningRow[i] = Matrix.beginningRow[i-1]} + elements diferents de zero en la fila i.
+\end{itemize}
+
+\paragraph*{Script Matlab} \mbox{} \\
+
+\lstinputlisting[style=Matlab-editor]{report_src/constructor.m}
+
+\subsubsection{Mètodes per obtenir una fila, una columna i un element}
+
+El mètode per obtenir una fila es troba a partir de la línia 6 del \hyperref[sec:codi1]{codi} posterior. Com podem veure consisteix en primer crear una fila amb \texttt{Matrix.nColumns} zeros.
+Llavors, sabent que \texttt{Matrix.beginningRow[i]} ens indica on comença la fila i en el vector de valors i en el de columnes, i deduint que acaben a \texttt{Matrix.beginningRow[i+1]-1}; podem delimitar els elements de la fila. Només quedaria afegir aquests elements a les seves posicions corresponents (usant el vector de columnes).
+
+El mètode per obtenir un element es troba a partir de la línia 22 del \hyperref[sec:codi1]{codi} posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
+
+El mètode per obtenir una columna es troba a partir de la línia 32 del \hyperref[sec:codi1]{codi} posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow} té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.
+
+\paragraph*{Script Matlab} \mbox{} \\
+
+\lstinputlisting[style=Matlab-editor]{report_src/getters.m}
+
+
+\section{Per perfil}
+
+ 
+ Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
+ 
+\subsection{Matrius banda}	 
+
+Com vam veure a classe, 
+una matriu $n \times n$ és banda si existeixen $p$ i $q$ naturals, tals que $1< p, q < n$  i $a_{i j} = 0$ sempre que $p \leq j - i$ o $q \leq i-j$. 
+
+Anomenem ample de banda de la matriu a $p + q - 1$.
+
+L'\textbf{envoltant} de una matriu banda consisteix en tots els elements de cada fila des de el primer no nul fins al ultim no nul, incloent els elements nuls que hi pugui haver entre mig.  Aquí la definició formal:
+
+L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) = \{i, j\} : f_i \leq j \leq l_i, 1 \leq i \leq n $ on $f_i$ és on comencen els valors no nuls de la fila i, i $l_i$ on acaben els valors no nuls de la fila i.
+
+ \subsection{El mètode}
+ 
+ Consisteix en guardar els elements de l'envoltant de la matriu, la columna on comença l'envoltant en cada fila, i la posició en el vector de valors on comença cada fila.
+ 
+Doncs, ens quedarien tres vectors:
+\begin{itemize}
+	\item \textbf{valors:} amb els valors de l'envoltant.
+	\item \textbf{columnInici:} amb el valor $f_i$ de cada fila (la columna on comença l'envoltant en cada fila.
+	\item \textbf{iniFiles:} amb la posició on comença cada fila en el vector valors.
+\end{itemize}		 
+
+\subsection{Exemple}
+ 
+ \[
+ 	\begin{pmatrix}
+		  	1	&	2	& 0	&	0	\\
+		  	0	&	1	&	0	&	0	\\
+		 	0	&	2	&	0	&	2	\\
+		0	&	0	&	0	&	-2	\\
+\end{pmatrix}	 	\qquad = \qquad
+\begin{tabu}{l|c c c c c c c}
+		$Vector$ & \multicolumn{7}{c}{$Coeficients$}\\
+		\hline
+		$índex$			&	1	&	2	&	3	&	4	&	5	&	6	&	7	\\
+		\hline
+		$valors$			&	1	&	2	&	1 &	2	&	0	&	2	&	-2	\\
+		$columnInici$	&	1	&	2	&	2	&	4	&		\\ 	
+		$iniFiles$			& 1	&	3	&	4	&	7 \\
+\end{tabu}    
+ \]
+ 
+ \section{Altres mètodes}
+ 
+ \subsection{Diccionari de claus}
+ 
+ Conegut també com a \textit{Dictionary of Keys (DOK)}, consisteix en tenir un diccionari que mapeja parelles de (fila, columna) amb el valor de cada element. Els elements que no estan en el diccionari es poden considerar zero. 
+ Aquest mètode es bo per construir la matriu de manera incremental en un ordre aleatori, però es dolent al iterar pels elements diferents de zero en un ordre lexicogràfic. El seu ús més habitual es usar aquest format per construir la matriu, per després convertir-la en un format més eficient de processar.
+ 
+ \subsection{Llista de llistes}
+
+Guarda una llista per fila, en la qual cada entrada és una parella de valors (valor, columna). S'acostumen a ordenar per número de columna per motius d'eficiència. Aquest mètode també es bo per construir la matriu de forma incremental.
+
+\subsection{Esquema DIA}
+
+Aquest esquema s'usa quan els valors no nuls estan restringits a un reduït nombre de diagonals. Consisteix en guardar una matriu de dades que conté els valors no nuls i un vector amb els \textit{offsets}, que guarda el desplaçament de cada diagonal respecte la diagonal principal.\newline
+A la diagonal principal li correspon l'\textit{offset} 0. A les diagonals superiors, els hi assignem valors positius; a les inferiors, valors negatius.
+
+\subsubsection*{Exemple}
+
+Donada la matriu:
+ \[
+ 	\begin{pmatrix}
+		  	1	&	7	& 0	&	0	\\
+		  	0	&	2	&	8	&	0	\\
+		 	5	&	0	&	3	&	9	\\
+		0	&	6	&	0	&	4	\\
+\end{pmatrix} \]
+
+Necessitaríem guardar el següent:
+ 
+  \[ dat = 
+ 	\begin{pmatrix}
+		  	*	&	1	& 7	\\
+		  	*	&	2	&	8	\\
+		 	5	&	3	&	9	\\
+		6	&	4	&	*	\\
+\end{pmatrix} , off = (-2, 0, 1)    
+ \] 
+
+\chapter{Operacions amb matrius disperses emmagatzemades per files}
+
+\section{Mètode per afegir una fila a una matriu dispersa}
+
+Aquest mètode està pensat per construir les matrius de forma incremental, cosa que ens serà molt útil per fer les operacions posteriors.
+
+El mètode en sí consisteix en fer exactament el mateix que fa el \hyperref[sec:Constructor]{constructor} per cada fila, per la donada per paràmetre en el mètode. 
+
+\paragraph*{Script Matlab} \mbox{} \\
+\lstinputlisting[style=Matlab-editor]{report_src/addRow.m}
+
+
+\section{Mètode per sumar dues matrius disperses}
+
+Per sumar dues matrius disperses sense carregar tota la matriu en memòria sumem fila per fila i ho afegim a una nova matriu dispersa resultat.
+
+\paragraph*{Script Matlab} \mbox{} \\
+\lstinputlisting[style=Matlab-editor]{report_src/sum.m}
+
+%http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
+
+%1.  Qu`e  ́es una matriu dispersa.  Definici ́o o definicions.
+%2.  Formes de emmagatzemar una matriu dispersa.  Implantar en Matlab les diferents formes de de fer-ho.
+%3.  Operacions  amb  matrius  disperses.   Suma,  Producte  matriu-vector,  Producte  matriu-matriu.
+%4.  Resoluci ́o de sistemes.  Reordenaci ́o de les matrius.
+%5.  Poseu exemples d’aplicaci ́o de la factoritzaci ́o LU aplicada a una sistema dispers.
+%6.  Doneu una estimaci ́o del estalvi en termes de temps de comput i espai
+
+\end{document}
