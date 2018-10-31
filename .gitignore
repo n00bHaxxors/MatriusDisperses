@@ -6,3 +6,4 @@ report.toc
 report.fdb_latexmk
 report.fls
 report.synctex.gz
+src/.*

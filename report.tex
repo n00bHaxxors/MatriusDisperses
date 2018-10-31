@@ -15,6 +15,8 @@
   \usepackage{graphicx}
   \usepackage{subcaption}
   \usepackage{float}
+  \usepackage[numbered,framed]{matlab-prettifier}
+  
   \newunicodechar{Ŀ}{\L.}
   \newunicodechar{ŀ}{\l.}
   
@@ -43,7 +45,7 @@
     breakatwhitespace=true,
     tabsize=3,
     extendedchars=true,
-    literate={á}{{\'a}}1 {à}{{\`a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1
+	literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ï}{{\"i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1 {ü}{{\"u}}1 {ç}{{\c{c}}}1
   }
   
   
@@ -114,11 +116,11 @@
 	    \begin{tabu}{l|c}
 	    	$índex$	&	$tupla$ (a_{i j}, i, j)	\\
 	    	\hline
-	    	0	&	(1, 0, 0) \\
-	    	1	&	(2, 0, 3) \\
-	    	2	& (1, 1, 1) \\
-	    	3	& (1, 3, 0) \\
-	    	4	& (-2, 3,2)	\\ 
+	    	0	&	(1, 1, 1) \\
+	    	1	&	(2, 1, 4) \\
+	    	2	& (1, 2, 2) \\
+	    	3	& (3, 4, 1) \\
+	    	4	& (-2, 4,3)	\\ 
 	    \end{tabu}  
     \]
 	
@@ -127,9 +129,9 @@
 		\begin{tabular}{l|c c c c c}
 			Vector & \multicolumn{5}{c}{Coeficients}\\
 			\hline
-			valors			&	1	&	2	&	1 &	1	&	-2	\\
-			files				&	0	&	0	&	1	&	3	&	3	\\
-			columnes	&	0	&	3	&	1	&	0	&	2	\\ 	
+			valors			&	1	&	2	&	1 &	3	&	-2	\\
+			files				&	1	&	1	&	2	&	4	&	4	\\
+			columnes	&	1	&	4	&	2	&	1	&	3	\\ 	
 		\end{tabular}	
 	\end{center}
 	
@@ -160,19 +162,44 @@
 	\begin{tabu}{l|c c c c c}
 			$Vector$ & \multicolumn{5}{c}{$Coeficients$}\\
 			\hline
-			$índex$			&	0	&	1	&	2	&	3	&	4	\\
+			$índex$			&	1	&	2	&	3	&	4	&	5	\\
 			\hline
-			$valors$			&	1	&	2	&	1 &	1	&	-2	\\
-			$columnes$	&	0	&	3	&	1	&	0	&	2	\\ 	
-			$iniFiles$			& 0	&	2	&	3	& & \\
+			$valors$			&	1	&	2	&	1 &	3	&	-2	\\
+			$columnes$	&	1	&	4	&	2	&	1	&	3	\\ 	
+			$iniFiles$			& 1	&	3	&	4	&	4 &	6 \\
 	\end{tabu}		\]
 
 	Si es canvien files per columnes, dona la implementació per columnes, o també anomenada \textit{Compressed Sparse Columns (CSC)}.
 	
 	\subsection{Implementació del mètode CSR}
 	
-	Aquí va la implementació i tot el relacionat
+	Hem implementat un script Matlab amb una classe \texttt{CSRSparseMatrix} que guardi les dades necessàries. Aquestes les tenim en ``l'atribut"\texttt{ Matrix} dins del bloc \texttt{properties} (línia 10 del \hyperref[sec:codi1]{codi} posterior). Aquestes dades consisteixen en el següent:	
+	\begin{itemize}
+	\item  \texttt{Matrix.nColumns}: número de columnes de la matriu, necessari per recrear les files posteriorment.
+	\item  \texttt{Matrix.values}: vector valors comentat anteriorment, amb els valors no nuls de la matriu.
+	\item  \texttt{Matrix.columns}: vector de columnes, amb la columna corresponent a cada valor amb el mateix índex.
+	\item  \texttt{Matrix.beginningRow}: vector amb els índex comença cada fila en el vector de valors i de columnes.
+	\end{itemize}
 	
+	\subsubsection{Constructor}
+	Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial (a partir de la línia 20 del \hyperref[sec:codi1]{codi} posterior): només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
+	\begin{itemize}
+	\item \texttt{Matrix.beginningRow[1] = 0}.
+	\item \texttt{Matrix.beginningRow[i] = Matrix.beginningRow[i-1]} + elements diferents de zero en la fila i.
+	\end{itemize}
+	
+	\subsubsection{Mètodes per obtenir una fila i un element}
+	
+	El mètode per obtenir una fila es troba a partir de la línia 46 del \hyperref[sec:codi1]{codi} posterior. Com podem veure consisteix en primer crear una fila amb \texttt{Matrix.nColumns} zeros.
+	Llavors, sabent que \texttt{Matrix.beginningRow[i]} ens indica on comença la fila i en el vector de valors i en el de columnes, i deduint que acaben a \texttt{Matrix.beginningRow[i+1]-1}; podem delimitar els elements de la fila. Només quedaria afegir aquests elements a les seves posicions corresponents (usant el vector de columnes).
+	
+	El mètode per obtenir una fila es troba a partir de la línia 62 del \hyperref[sec:codi1]{codi} posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
+	
+	
+	\subsubsection{Script Matlab}
+	\label{sec:codi1}
+	
+	\lstinputlisting[style=Matlab-editor]{report_src/csr1.m}
 	
 	
 	\section{Per perfil}
@@ -218,11 +245,11 @@
     \begin{tabu}{l|c c c c c c c}
 			$Vector$ & \multicolumn{7}{c}{$Coeficients$}\\
 			\hline
-			$índex$			&	0	&	1	&	2	&	3	&	4	&	5	&	6	\\
+			$índex$			&	1	&	2	&	3	&	4	&	5	&	6	&	7	\\
 			\hline
 			$valors$			&	1	&	2	&	1 &	2	&	0	&	2	&	-2	\\
-			$columnInici$	&	0	&	1	&	1	&	3	&		\\ 	
-			$iniFiles$			& 0	&	2	&	3	&	6 \\
+			$columnInici$	&	1	&	2	&	2	&	4	&		\\ 	
+			$iniFiles$			& 1	&	3	&	4	&	7 \\
 	\end{tabu}    
 	 \]
 	 
