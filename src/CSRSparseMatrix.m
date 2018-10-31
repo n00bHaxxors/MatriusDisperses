@@ -87,7 +87,7 @@ classdef CSRSparseMatrix
         
     %============addRow=========================================================
     %
-    %%% Donats obj, sent el objecte actual, i y la fila que volem afegir;
+    %%% Donats obj, sent el objecte actual, i row la fila que volem afegir;
     %%%% retorna obj amb la fila nova afegida
     %
     function obj = addRow(obj, row)
