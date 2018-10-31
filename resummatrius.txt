@@ -1,7 +1,7 @@
 coses interessants: http://personales.upv.es/dginesta/docencia/posgrado/sparse.pdf
                     https://www.mathworks.com/help/matlab/ref/sparse.html
                     https://www.mathworks.com/help/matlab/sparse-matrices.html
-
+		    https://upcommons.upc.edu/bitstream/handle/2117/100887/122055.pdf?sequence=1&isAllowed=y
 
 
 

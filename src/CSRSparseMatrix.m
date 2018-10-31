@@ -53,7 +53,7 @@ classdef CSRSparseMatrix
       end
     end
     
-    %============getElem=========================================================
+    %============getElem========================================================
     %
     %%% Donats obj, sent el objecte actual i (x,y) les coordenades del element 
     %%%% que volem obtenir;
@@ -64,7 +64,7 @@ classdef CSRSparseMatrix
       elem = row(y);
     end
     
-    %============getColumn=========================================================
+    %============getColumn======================================================
     %
     %%% Donats obj, sent el objecte actual, i y la columna que volem obtenir;
     %%%% retorna la columna y de la matriu obj
@@ -83,6 +83,26 @@ classdef CSRSparseMatrix
           end
         end
       end
+    end
+        
+    %============addRow=========================================================
+    %
+    %%% Donats obj, sent el objecte actual, i y la fila que volem afegir;
+    %%%% retorna obj amb la fila nova afegida
+    %
+    function obj = addRow(obj, row)
+      i=size(obj.Matrix.beginningRow,2)
+      nonZero=obj.Matrix.beginningRow(i)
+      nonZeroThisRow=0;
+      [_,n] = size(row);
+      for j = 1:n
+        if(row(j) ~= 0)
+          obj.Matrix.values = [obj.Matrix.values, row(j)]
+          obj.Matrix.columns = [obj.Matrix.columns, j]
+          nonZeroThisRow=nonZeroThisRow+1
+        end
+      end
+      obj.Matrix.beginningRow = [obj.Matrix.beginningRow, nonZero+nonZeroThisRow];
     end
     
   end
