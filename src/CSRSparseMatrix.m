@@ -27,7 +27,7 @@ classdef CSRSparseMatrix
         nonZero=obj.Matrix.beginningRow(i);
         nonZeroThisRow=0;
         for j = 1:n
-          if(A(i,j) !=0)
+          if(A(i,j) ~= 0)
             obj.Matrix.values = [obj.Matrix.values, A(i,j)];
             obj.Matrix.columns = [obj.Matrix.columns, j];
             nonZeroThisRow=nonZeroThisRow+1;
@@ -75,8 +75,11 @@ classdef CSRSparseMatrix
       for j=1:m
         column(j)=0;
         for i=obj.Matrix.beginningRow(j):obj.Matrix.beginningRow(j+1)-1
-          if obj.Matrix.columns(i)==y column(j) = obj.Matrix.values(i), break
-          elseif obj.Matrix.columns(i)> y break
+          if obj.Matrix.columns(i)==y 
+              column(j) = obj.Matrix.values(i);
+              break
+          elseif obj.Matrix.columns(i)> y 
+              break
           end
         end
       end
