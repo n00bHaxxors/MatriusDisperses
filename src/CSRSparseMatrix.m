@@ -64,7 +64,7 @@ classdef CSRSparseMatrix
       elem = row(y);
     end
     
-    %============getRow=========================================================
+    %============getColumn=========================================================
     %
     %%% Donats obj, sent el objecte actual, i y la columna que volem obtenir;
     %%%% retorna la columna y de la matriu obj

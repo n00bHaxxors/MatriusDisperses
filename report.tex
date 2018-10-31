@@ -16,6 +16,8 @@
   \usepackage{subcaption}
   \usepackage{float}
   \usepackage[numbered,framed]{matlab-prettifier}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
   
   \newunicodechar{Ŀ}{\L.}
   \newunicodechar{ŀ}{\l.}
@@ -46,6 +48,7 @@
     tabsize=3,
     extendedchars=true,
 	literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ï}{{\"i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1 {ü}{{\"u}}1 {ç}{{\c{c}}}1
+				{Á}{{\'A}}1 {À}{{\`A}}1 {Ã}{{\~A}}1 {É}{{\'E}}1 {È}{{\`E}}1 {Í}{{\'I}}1 {Ï}{{\"I}}1 {Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ú}{{\'U}}1 {Ü}{{\"U}}1 {Ç}{{\c{C}}}1
   }
   
   
@@ -173,7 +176,7 @@
 	
 	\subsection{Implementació del mètode CSR}
 	
-	Hem implementat un script Matlab amb una classe \texttt{CSRSparseMatrix} que guardi les dades necessàries. Aquestes les tenim en ``l'atribut"\texttt{ Matrix} dins del bloc \texttt{properties} (línia 10 del \hyperref[sec:codi1]{codi} posterior). Aquestes dades consisteixen en el següent:	
+	Hem implementat un script Matlab amb una classe \texttt{CSRSparseMatrix} que guardi les dades necessàries. Aquestes les tenim en ``l'atribut"\texttt{ Matrix} dins del bloc \texttt{properties} (línia 10 del codi següent). Aquestes dades consisteixen en el següent:	
 	\begin{itemize}
 	\item  \texttt{Matrix.nColumns}: número de columnes de la matriu, necessari per recrear les files posteriorment.
 	\item  \texttt{Matrix.values}: vector valors comentat anteriorment, amb els valors no nuls de la matriu.
@@ -181,27 +184,33 @@
 	\item  \texttt{Matrix.beginningRow}: vector amb els índex comença cada fila en el vector de valors i de columnes.
 	\end{itemize}
 	
+	\paragraph*{Script Matlab}\mbox{}\\
+	
+	\lstinputlisting[style=Matlab-editor]{report_src/class.m}
+	
 	\subsubsection{Constructor}
-	Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial (a partir de la línia 20 del \hyperref[sec:codi1]{codi} posterior): només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
+	Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
 	\begin{itemize}
 	\item \texttt{Matrix.beginningRow[1] = 0}.
 	\item \texttt{Matrix.beginningRow[i] = Matrix.beginningRow[i-1]} + elements diferents de zero en la fila i.
 	\end{itemize}
 	
+	\paragraph*{Script Matlab} \mbox{} \\
+	
+	\lstinputlisting[style=Matlab-editor]{report_src/constructor.m}
+	
 	\subsubsection{Mètodes per obtenir una fila, una columna i un element}
 	
-	El mètode per obtenir una fila es troba a partir de la línia 46 del \hyperref[sec:codi1]{codi} posterior. Com podem veure consisteix en primer crear una fila amb \texttt{Matrix.nColumns} zeros.
+	El mètode per obtenir una fila es troba a partir de la línia 6 del \hyperref[sec:codi1]{codi} posterior. Com podem veure consisteix en primer crear una fila amb \texttt{Matrix.nColumns} zeros.
 	Llavors, sabent que \texttt{Matrix.beginningRow[i]} ens indica on comença la fila i en el vector de valors i en el de columnes, i deduint que acaben a \texttt{Matrix.beginningRow[i+1]-1}; podem delimitar els elements de la fila. Només quedaria afegir aquests elements a les seves posicions corresponents (usant el vector de columnes).
 	
-	El mètode per obtenir un element es troba a partir de la línia 62 del \hyperref[sec:codi1]{codi} posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
+	El mètode per obtenir un element es troba a partir de la línia 22 del \hyperref[sec:codi1]{codi} posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
 	
-	El mètode per obtenir una columna es troba a partir de la línia 72 del \hyperref[sec:codi1]{codi} posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow} té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.
+	El mètode per obtenir una columna es troba a partir de la línia 32 del \hyperref[sec:codi1]{codi} posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow} té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.
 	
+	\paragraph*{Script Matlab} \mbox{} \\
 	
-	\subsubsection{Script Matlab}
-	\label{sec:codi1}
-	
-	\lstinputlisting[style=Matlab-editor]{report_src/csr1.m}
+	\lstinputlisting[style=Matlab-editor]{report_src/getters.m}
 	
 	
 	\section{Per perfil}
