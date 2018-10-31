@@ -189,6 +189,7 @@
 	\lstinputlisting[style=Matlab-editor]{report_src/class.m}
 	
 	\subsubsection{Constructor}
+	\label{sec:Constructor}
 	Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
 	\begin{itemize}
 	\item \texttt{Matrix.beginningRow[1] = 0}.
@@ -299,6 +300,22 @@
     		6	&	4	&	*	\\
     \end{pmatrix} , off = (-2, 0, 1)    
      \] 
+  
+  \chapter{Operacions amb matrius disperses emmagatzemades per files}
+  
+  \section{Utilitats necessàries}
+  
+  \subsection{Mètode per afegir una fila a una matriu dispersa}
+  
+  Aquest mètode està pensat per construir les matrius de forma incremental, cosa que ens serà molt útil per fer les operacions posteriors.
+  
+  El mètode en sí consisteix en fer exactament el mateix que fa el \hyperref[sec:Constructor]{constructor} per cada fila, per la donada per paràmetre en el mètode. 
+  
+  \paragraph*{Script Matlab} \mbox{} \\
+	
+	\lstinputlisting[style=Matlab-editor]{report_src/addRow.m}
+  
+  
   
   
   
