@@ -140,7 +140,7 @@
   
 	\section{Per files}  
   	
-	També conegut com a \textit{Compressed Sparse Rows (CSR)}, \textit{Compressed Row Storage (CSR)}, o format \textit{Yale}. És el mètode més estès.
+	També conegut com a \textit{Compressed Sparse Rows (CSR)}, \textit{Compressed Row Storage (CRS)}, o format \textit{Yale}. És el mètode més estès.
 	
 	Consisteix en guardar els elements ordenats per files, guardar la columna on es troben, i la posició del primer element de cada fila en el vector de valors.
 	Així ens quedaran tres vectors:
@@ -195,7 +195,7 @@
 	
 	El mètode per obtenir un element es troba a partir de la línia 62 del \hyperref[sec:codi1]{codi} posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
 	
-	El mètode per obtenir una columna es troba a partir de la línia 72 del \hyperref[sec:codi1]{codi} posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow}té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.
+	El mètode per obtenir una columna es troba a partir de la línia 72 del \hyperref[sec:codi1]{codi} posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow} té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.
 	
 	
 	\subsubsection{Script Matlab}
@@ -218,9 +218,7 @@
 	
 	L'\textbf{envoltant} de una matriu banda consisteix en tots els elements de cada fila des de el primer no nul fins al ultim no nul, incloent els elements nuls que hi pugui haver entre mig.  Aquí la definició formal:
 	
-	L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) = \{i, j\} : f_i \leq j \leq l_i, 1 \leq i \leq n $ 
-	
-	on $f_i$ és on comencen els valors no nuls en la fila i, i $l_i$ on acaben els valors no nul en la fila i.
+	L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) = \{i, j\} : f_i \leq j \leq l_i, 1 \leq i \leq n $ on $f_i$ és on comencen els valors no nuls de la fila i, i $l_i$ on acaben els valors no nuls de la fila i.
 	
 	
 
@@ -259,17 +257,17 @@
 	 
 	 \subsection{Diccionari de claus}
 	 
-	 Conegut també com a \textit{Dictionary of Keys (DOK)}, consisteix en tenir un diccionari que mapeja parelles de (fila, columna) amb el valor de cada element. Els elements que no estan en el diccionari es poden considerar zero. Aquest mètode es bo per construir la matriu de manera incremental en un ordre aleatori, però es dolent al iterar pels elements diferents de zero en un ordre lexicogràfic. El seu ús més habitual es usar aquest format per construir la matriu, per després convertir-la en un format més eficient de processar.
+	 Conegut també com a \textit{Dictionary of Keys (DOK)}, consisteix en tenir un diccionari que mapeja parelles de (fila, columna) amb el valor de cada element. Els elements que no estan en el diccionari es poden considerar zero. 
+	 Aquest mètode es bo per construir la matriu de manera incremental en un ordre aleatori, però es dolent al iterar pels elements diferents de zero en un ordre lexicogràfic. El seu ús més habitual es usar aquest format per construir la matriu, per després convertir-la en un format més eficient de processar.
 	 
 	 \subsection{Llista de llistes}
   
-  Guarda una llista per fila, en la qual cada entrada és una parella de valors (valor, columna). S'acostumen a ordena pel número de columna per motius d'eficiència. Aquest mètode també es bo per construir la matriu de forma incremental.
+  Guarda una llista per fila, en la qual cada entrada és una parella de valors (valor, columna). S'acostumen a ordenar per número de columna per motius d'eficiència. Aquest mètode també es bo per construir la matriu de forma incremental.
   
   \subsection{Esquema DIA}
   
-  Aquest esquema s'usa quan els valors no nuls estan restringits a un reduït nombre de diagonals. Consisteix en guardar una matriu de dades que conté els valors no nuls i un vector amb els \textit{offsets}, que guarda els \textit{offsets} de cada diagonal respecte la diagonal principal.
-  
-  La diagonal principal li correspon l'\textit{offset} 0. A les diagonals superiors, les hi assignem valors positius; les inferiors, valors negatius.
+  Aquest esquema s'usa quan els valors no nuls estan restringits a un reduït nombre de diagonals. Consisteix en guardar una matriu de dades que conté els valors no nuls i un vector amb els \textit{offsets}, que guarda el desplaçament de cada diagonal respecte la diagonal principal.\newline
+  A la diagonal principal li correspon l'\textit{offset} 0. A les diagonals superiors, els hi assignem valors positius; a les inferiors, valors negatius.
   
   \subsubsection*{Exemple}
 	
