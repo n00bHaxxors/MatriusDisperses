@@ -84,25 +84,42 @@ classdef CSRSparseMatrix
         end
       end
     end
+    %============addRow=========================================================
+    %
+    %%% Donats obj, sent el objecte actual, i row la fila que volem afegir;
+    %%%% retorna obj amb la fila nova afegida
+    %
+    function obj = addRow(obj, row)
+      i=size(obj.Matrix.beginningRow,2)
+      nonZero=obj.Matrix.beginningRow(i)
+      nonZeroThisRow=0;
+      [_,n] = size(row);
+      for j = 1:n
+        if(row(j) ~= 0)
+          obj.Matrix.values = [obj.Matrix.values, row(j)]
+          obj.Matrix.columns = [obj.Matrix.columns, j]
+          nonZeroThisRow=nonZeroThisRow+1
+        end
+      end
+      obj.Matrix.beginningRow = [obj.Matrix.beginningRow, nonZero+nonZeroThisRow];
+    end
     
     %============sum=========================================================
     %
-    %%% Donats obj, sent el objecte actual, i y la columna que volem obtenir;
-    %%%% retorna la columna y de la matriu obj
+    %%% Donats obj i una altre matriu dispersa de la mateixa mida;
+    %%%% retorna la suma de les dues matrius
     %
     function res = sum(obj, B)
       nRowsA = length(obj.Matrix.beginningRow)-1;
       nRowsB = length(B.Matrix.beginningRow)-1;
-      
       assert(obj.Matrix.nColumns == B.Matrix.nColumns && nRowsA == nRowsB)
-      
       res = CSRSparseMatrix([]);
-      res.Matrix.nColumns = obj.n;
-      res.Matrix.values = [];
-      res.Matrix.columns = [];
-      res.Matrix.beginningRow = [1];
-      
+      res.Matrix.nColumns = obj.Matrix.nColumns;      
       for i=1:nRowsB
+        rowA = obj.getRow(i);
+        rowB = B.getRow(i);
+        res = res.addRow(rowA+rowB);
+      end
     end
     
   end
