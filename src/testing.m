@@ -8,5 +8,5 @@ function [t,t2] = testing
   [0,0,0,0]];
   BRow = [3,0,-2,0];
   t = CSRSparseMatrix(A)
-  t2 = t.multRow(BRow)
+  t2 = t.multColumn(BRow)
 endfunction

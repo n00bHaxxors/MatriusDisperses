@@ -128,7 +128,7 @@ classdef CSRSparseMatrix
     %%%% retorna el resultat de la multiplicació b*obj
     %
     function res = multColumn(obj,b)
-      res = zeros(length(obj.Matrix.beginningRow)-1,1);
+      res = zeros(1, length(obj.Matrix.beginningRow)-1);
       assert(obj.Matrix.nColumns == size(b,2));
       for i=1:obj.Matrix.nColumns
         bi = b(i);
