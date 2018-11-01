@@ -122,5 +122,24 @@ classdef CSRSparseMatrix
       end
     end
     
+    %============multColumn=====================================================
+    %
+    %%% Donats obj i un vector de la mateixa mida que les columnes de obj
+    %%%% retorna el resultat de la multiplicació b*obj
+    %
+    function res = multColumn(obj,b)
+      res = zeros(length(obj.Matrix.beginningRow)-1,1);
+      assert(obj.Matrix.nColumns == size(b,2));
+      for i=1:obj.Matrix.nColumns
+        bi = b(i);
+        for ii = obj.Matrix.beginningRow(i):obj.Matrix.beginningRow(i+1)-1
+          j = obj.Matrix.columns(ii);
+          res(j) = res(j) + obj.Matrix.values(ii)*bi;
+        end
+      end
+    end
+    
+    
+    
   end
 end

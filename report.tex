@@ -318,6 +318,52 @@ Per sumar dues matrius disperses sense carregar tota la matriu en memòria sumem
 \paragraph*{Script Matlab} \mbox{} \\
 \lstinputlisting[style=Matlab-editor]{report_src/sum.m}
 
+\section{Mètodes pel producte matriu-vector}
+
+Aquest apartat es dividirà en dos mètodes: 
+\begin{itemize}
+\item El producte d'un vector per una matriu.
+\item El producte d'una matriu per un vector.
+\end{itemize}
+
+\subsection{Producte d'un vector per una matriu}
+
+Consisteix en la multiplicació $c = b*A$, on A és una matriu $m \times n$, b és un vector de mida $m$ i c és un vector de mida $n$.
+
+El resultat d'aquesta operació, es pot representar així, pel cas que $m = 2$ i $n = 3$:
+
+ \[
+ 	\begin{bmatrix}
+		  	c_1	&	c_2	& c_3	\\
+\end{bmatrix} = 
+ 	\begin{bmatrix}
+		  	b_2	&	b_2	\\
+\end{bmatrix}
+ 	\begin{pmatrix}
+		  	a_{11}	&	a_{12} & a_{13}\\
+		  	a_{21}	&	a_{22} & a_{23}\\
+\end{pmatrix}
+\qquad \longrightarrow \qquad
+ \begin{matrix} 
+ c_1 = b_1 a_{11} + b_1 a_{21} \\
+ c_2 = b_2 a_{12} + b_2 a_{22} \\
+ c_3 = b_3 a_{13} + b_3 a_{23} \\
+ \end{matrix}
+ \]
+
+Això es podria generalitzar de la següent manera:
+
+\[
+ c_j = \sum_{i=1}^{m} b_j a_{ij}
+\]
+
+Amb aquesta formula, la implementació es simplifica bastant: nomes cal aplicar-la per a cada columna $j$, quedant un doble bucle, com es pot veure en el codi a continuació:
+
+\paragraph*{Script Matlab} \mbox{} \\
+\lstinputlisting[style=Matlab-editor]{report_src/multColumn.m}
+
+
+
 %http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
 
 %1.  Qu`e  ́es una matriu dispersa.  Definici ́o o definicions.
