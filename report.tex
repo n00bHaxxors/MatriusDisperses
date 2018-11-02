@@ -328,7 +328,7 @@ Aquest apartat es dividirà en dos mètodes:
 
 \subsection{Producte d'un vector per una matriu}
 
-Consisteix en la multiplicació $c = b*A$, on A és una matriu $m \times n$, b és un vector de mida $m$ i c és un vector de mida $n$.
+Consisteix en la multiplicació $c = b \times A$, on A és una matriu $m \times n$, b és un vector de mida $m$ i c és un vector de mida $n$.
 
 El resultat d'aquesta operació, es pot representar així, pel cas que $m = 2$ i $n = 3$:
 
@@ -337,7 +337,7 @@ El resultat d'aquesta operació, es pot representar així, pel cas que $m = 2$ i
 		  	c_1	&	c_2	& c_3	\\
 \end{bmatrix} = 
  	\begin{bmatrix}
-		  	b_2	&	b_2	\\
+		  	b_1	&	b_2	\\
 \end{bmatrix}
  	\begin{pmatrix}
 		  	a_{11}	&	a_{12} & a_{13}\\
@@ -345,22 +345,69 @@ El resultat d'aquesta operació, es pot representar així, pel cas que $m = 2$ i
 \end{pmatrix}
 \qquad \longrightarrow \qquad
  \begin{matrix} 
- c_1 = b_1 a_{11} + b_1 a_{21} \\
- c_2 = b_2 a_{12} + b_2 a_{22} \\
- c_3 = b_3 a_{13} + b_3 a_{23} \\
+ c_1 = b_1 a_{11} + b_2 a_{21} \\
+ c_2 = b_1 a_{12} + b_2 a_{22} \\
+ c_3 = b_1 a_{13} + b_2 a_{23} \\
  \end{matrix}
  \]
 
 Això es podria generalitzar de la següent manera:
 
 \[
- c_j = \sum_{i=1}^{m} b_j a_{ij}
+ c_j = \sum_{i=1}^{m} b_i a_{ij}
 \]
 
 Amb aquesta formula, la implementació es simplifica bastant: nomes cal aplicar-la per a cada columna $j$, quedant un doble bucle, com es pot veure en el codi a continuació:
 
 \paragraph*{Script Matlab} \mbox{} \\
+\lstinputlisting[style=Matlab-editor]{report_src/multRow.m}
+
+
+\subsection{Producte d'una matriu per un vector}
+Consisteix en la multiplicació $c = A \times b$, on A és una matriu $m \times n$, b és un vector de mida $n$ i c és un vector de mida $m$.
+
+En aquest cas el que fem és cada fila $i$ de la matriu, i la multipliquem per b. El resultat el guardem a $c_i$. \\ \\
+
+\paragraph*{Script Matlab} \mbox{} \\
 \lstinputlisting[style=Matlab-editor]{report_src/multColumn.m}
+
+
+\section{Mètode per multiplicar dues matrius}
+
+Consisteix en la multiplicació de $C = A \times B$, on $A$ és una matriu $m \times n$ i $B$ és una matriu $n \times o$, resultant en la matriu $C$ que és de mida $m \times o$. 
+
+Aquesta operació la podem representar simbolicament de la següent manera per a $m = 2, n = 3, o = 2$: 
+
+\[
+\begin{pmatrix}
+		  	c_{11}	&	c_{12}	\\
+		  	c_{21}	&	c_{22}	\\
+\end{pmatrix} = 
+ 	\begin{pmatrix}
+		  	a_{11}	&	a_{12} & a_{13}\\
+		  	a_{21}	&	a_{22} & a_{23}\\
+\end{pmatrix} \times
+ 	\begin{pmatrix}
+		  	b_{11}	&	b_{12}	\\
+		  	b_{21}	&	b_{22}	\\
+		  	b_{31}	&	b_{32}	\\
+\end{pmatrix} \qquad \longrightarrow \qquad
+ \begin{matrix} 
+ c_{11} = a_{11}b_{11} + a_{12}b_{21} + a_{13}b_{31} \\
+ c_{12} = a_{11}b_{12} + a_{12}b_{22} + a_{13}b_{32} \\
+ c_{21} = a_{21}b_{11} + a_{22}b_{21} + a_{23}b_{31}	\\
+ c_{22} = a_{21}b_{12} + a_{22}b_{22} + a_{23}b_{32} \\
+ \end{matrix}
+\]
+
+Amb això podem veure com hi ha un patró semblant al vist en la multiplicació vector per matriu. Cada fila $i$ de $C$ és igual a la multiplicació de la fila $i$ de $A$ per la matriu $B$. Per tant podem fer que en la implementació, per cada fila $i$ de la matriu $C$, obtenir la fila $i$ de $A$ i fer $A_i \times B$ usant el mètode implementat anteriorment.
+
+ \paragraph*{Script Matlab} \mbox{} \\
+\lstinputlisting[style=Matlab-editor]{report_src/mtimes.m}
+
+
+
+
 
 
 

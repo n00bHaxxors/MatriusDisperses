@@ -83,6 +83,7 @@ classdef CSRSparseMatrix
           end
         end
       end
+      column = transpose(column);
     end
     %============addRow=========================================================
     %
@@ -90,15 +91,15 @@ classdef CSRSparseMatrix
     %%%% retorna obj amb la fila nova afegida
     %
     function obj = addRow(obj, row)
-      i=size(obj.Matrix.beginningRow,2)
-      nonZero=obj.Matrix.beginningRow(i)
+      i=size(obj.Matrix.beginningRow,2);
+      nonZero=obj.Matrix.beginningRow(i);
       nonZeroThisRow=0;
       [_,n] = size(row);
       for j = 1:n
         if(row(j) ~= 0)
-          obj.Matrix.values = [obj.Matrix.values, row(j)]
-          obj.Matrix.columns = [obj.Matrix.columns, j]
-          nonZeroThisRow=nonZeroThisRow+1
+          obj.Matrix.values = [obj.Matrix.values, row(j)];
+          obj.Matrix.columns = [obj.Matrix.columns, j];
+          nonZeroThisRow=nonZeroThisRow+1;
         end
       end
       obj.Matrix.beginningRow = [obj.Matrix.beginningRow, nonZero+nonZeroThisRow];
@@ -109,7 +110,7 @@ classdef CSRSparseMatrix
     %%% Donats obj i una altre matriu dispersa de la mateixa mida;
     %%%% retorna la suma de les dues matrius
     %
-    function res = sum(obj, B)
+    function res = plus(obj, B)
       nRowsA = length(obj.Matrix.beginningRow)-1;
       nRowsB = length(B.Matrix.beginningRow)-1;
       assert(obj.Matrix.nColumns == B.Matrix.nColumns && nRowsA == nRowsB)
@@ -122,14 +123,14 @@ classdef CSRSparseMatrix
       end
     end
     
-    %============multColumn=====================================================
+    %============multRow=====================================================
     %
     %%% Donats obj i un vector de la mateixa mida que les columnes de obj
     %%%% retorna el resultat de la multiplicació b*obj
     %
-    function res = multColumn(obj,b)
+    function res = multRow(obj,b)
       res = zeros(1, length(obj.Matrix.beginningRow)-1);
-      assert(obj.Matrix.nColumns == size(b,2));
+      assert(obj.Matrix.nColumns == length(b));
       for i=1:obj.Matrix.nColumns
         bi = b(i);
         for ii = obj.Matrix.beginningRow(i):obj.Matrix.beginningRow(i+1)-1
@@ -139,7 +140,39 @@ classdef CSRSparseMatrix
       end
     end
     
+    %============multColumn=====================================================
+    %
+    %%% Donats obj i un vector de la mateixa mida que les files de obj
+    %%%% retorna el resultat de la multiplicació obj*b
+    % 
+    function res = multColumn(obj, b)
+      res=zeros(1, length(obj.Matrix.nColumns));
+      m = length(obj.Matrix.beginningRow)-1;
+      assert ( m == length(b));
+      for i = 1:m
+        row = obj.getRow(i);
+        res(i)= row * b;
+      end
+      res = transpose(res);    
+    end
     
+    %============mtimes=========================================================
+    %
+    %%% Donats obj de mida m*n i una matriu dispersa B de mida n*o,
+    %%%% retorna el resultat de la multiplicació obj*B de mida m*o
+    % 
+    function res = mtimes(obj, B)
+      nRowsA = length(obj.Matrix.beginningRow)-1;
+      nRowsB = length(B.Matrix.beginningRow)-1;
+      assert(obj.Matrix.nColumns == nRowsB)
+      res = CSRSparseMatrix([]);
+      res.Matrix.nColumns = B.Matrix.nColumns;      
+      
+      for i=1:nRowsB
+        row = obj.getRow(i);
+        res = res.addRow(B.multRow(row));
+      end
+    end
     
   end
 end
