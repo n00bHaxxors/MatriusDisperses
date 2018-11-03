@@ -16,6 +16,7 @@
   \usepackage{subcaption}
   \usepackage{float}
   \usepackage[numbered,framed]{matlab-prettifier}
+  \usepackage{xcolor}
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
   
@@ -383,21 +384,21 @@ Aquesta operació la podem representar simbolicament de la següent manera per a
 		  	c_{11}	&	c_{12}	\\
 		  	c_{21}	&	c_{22}	\\
 \end{pmatrix} = 
- 	\begin{pmatrix}
+\begin{pmatrix}
 		  	a_{11}	&	a_{12} & a_{13}\\
 		  	a_{21}	&	a_{22} & a_{23}\\
 \end{pmatrix} \times
- 	\begin{pmatrix}
+\begin{pmatrix}
 		  	b_{11}	&	b_{12}	\\
 		  	b_{21}	&	b_{22}	\\
 		  	b_{31}	&	b_{32}	\\
 \end{pmatrix} \qquad \longrightarrow \qquad
- \begin{matrix} 
- c_{11} = a_{11}b_{11} + a_{12}b_{21} + a_{13}b_{31} \\
- c_{12} = a_{11}b_{12} + a_{12}b_{22} + a_{13}b_{32} \\
- c_{21} = a_{21}b_{11} + a_{22}b_{21} + a_{23}b_{31}	\\
- c_{22} = a_{21}b_{12} + a_{22}b_{22} + a_{23}b_{32} \\
- \end{matrix}
+\begin{matrix} 
+c_{11} = a_{11}b_{11} + a_{12}b_{21} + a_{13}b_{31} \\
+c_{12} = a_{11}b_{12} + a_{12}b_{22} + a_{13}b_{32} \\
+c_{21} = a_{21}b_{11} + a_{22}b_{21} + a_{23}b_{31}	\\
+c_{22} = a_{21}b_{12} + a_{22}b_{22} + a_{23}b_{32} \\
+\end{matrix}
 \]
 
 Amb això podem veure com hi ha un patró semblant al vist en la multiplicació vector per matriu. Cada fila $i$ de $C$ és igual a la multiplicació de la fila $i$ de $A$ per la matriu $B$. Per tant podem fer que en la implementació, per cada fila $i$ de la matriu $C$, obtenir la fila $i$ de $A$ i fer $A_i \times B$ usant el mètode implementat anteriorment.
@@ -405,7 +406,53 @@ Amb això podem veure com hi ha un patró semblant al vist en la multiplicació 
  \paragraph*{Script Matlab} \mbox{} \\
 \lstinputlisting[style=Matlab-editor]{report_src/mtimes.m}
 
+\chapter{Resolució de sistemes. Reordenació de les matrius.}
 
+\section{Introducció}
+
+Per resoldre un sistema d'equacions representat amb una matriu dispersa podriem usar qualsevol dels mètodes que coneixem per resoldre matrius, però ens trobariem fent un nombre molt gran d'operacions innecessàries i gastant molta més memòria de la necessària. \newline
+
+Suposem que apliquem el mètode de Gauss en una matriu dispersa, podem veure marcats en vermell tots els elements no nuls que hem introduit al aplicar Gauss (elements \textit{fill-in}):
+
+\[
+\begin{pmatrix}
+  	x & 0 & x & 0 & 0\\
+  	0 & x & 0 & 0 & x\\
+  	x & 0 & x & 0 & 0\\
+  	0 & 0 & 0 & x & 0\\
+  	0 & x & 0 & 0 & x\\
+\end{pmatrix} \qquad \xrightarrow{\text{Gauss}} \qquad
+\begin{pmatrix}
+  	x & 0 & x & 0 & 0\\
+  	0 & x & \textcolor{red}{x} & 0 & x\\
+  	x & \textcolor{red}{x} & x & 0 & \textcolor{red}{x}\\
+  	0 & 0 & 0 & x & \textcolor{red}{x}\\
+  	0 & x & \textcolor{red}{x} & \textcolor{red}{x} & x\\
+\end{pmatrix}
+\]
+
+%Si apliquem un mètode de reordenació de files i columnes com l'algoritme de grau mínim aconseguirem minimitzar o fins i tot fer desaparèixer els elements de fill-in estalviant memòria, operacions innecessàries i millorant l'estabilitat numèrica de tota la operació.
+
+Això ens suposaria un increment del ús de memòria i ens obligaria a incrementar molt el número d'operacions, augmentant la complexitat numèrica. Així doncs, ens interessa reordenar files i columnes per tal de reduir o fins i tot desfer-nos dels elements de \textit{fill-in}. 
+
+\section{Resolució de grans sistemes d'equacions lineals}
+
+Per resoldre qualsevol sistema d'equacions representat amb una matriu dispersa, seguirem els següents passos:
+
+\begin{enumerate}
+	\item Determinar l'estructura símbolica de $A$.
+	\item Obtenir les permutacions $P$ i $Q$, tals que $PAQ$ tingui una estructura de densitat òptima(no genera elements de \textit{fill-in}).
+	\item Fer factorització LU: $LU = PAQ$ i $c = Pb$.
+	\item Resoldre $Lz = c, Uy = z$ i $x=Qy$.
+\end{enumerate}
+
+\subsection{Determinació de l'estructura símbolica de la matriu}
+
+Per poder fer el següent apartat, la reordenació, primer cal saber com és la matriu que tenim, posat que en funció d'aixó requerirem d'un algoritme diferent. Per exemple, amb matrius simètriques, hi ha un gran nombre de algoritmes per fer la reordenació més eficientment. En canvi per matrius no simètriques, els algoritmes necessàris són uns altres.
+
+Per saber-ho fem una representació simbòlica de com és la matriu d'equacions.
+
+\subsection{Mètodes de reordenació}
 
 
 
