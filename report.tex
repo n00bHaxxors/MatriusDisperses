@@ -17,8 +17,11 @@
   \usepackage{float}
   \usepackage[numbered,framed]{matlab-prettifier}
   \usepackage{xcolor}
-\setcounter{tocdepth}{3}
-\setcounter{secnumdepth}{3}
+  \usepackage{pgf, tikz}
+  \usetikzlibrary{arrows, automata, positioning}
+  
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
   
 \newunicodechar{Ŀ}{\L.}
 \newunicodechar{ŀ}{\l.}
@@ -61,14 +64,31 @@ literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{
 }
 
 
+\newcommand\double[3][10]{%Passantli A i B genera quatre vertexs virtuals A-B-s, A-B-e (per resepresentar una aresta) i B-A-s, B-A-e (per representar l'altre aresta)
+  \draw (#2)
+    edge [bend left=#1,draw=none]
+    coordinate[at start](#2-#3-s)
+    coordinate[at end](#2-#3-e)
+    (#3)
+    edge [bend right=#1,draw=none]
+    coordinate[at start](#3-#2-e)
+    coordinate[at end](#3-#2-s)
+    (#3);
+}
+
+
 \setlength{\footskip}{50pt}
 \setlength{\parindent}{0cm} \setlength{\oddsidemargin}{-0.5cm} \setlength{\evensidemargin}{-0.5cm}
 \setlength{\textwidth}{17cm} \setlength{\textheight}{23cm} \setlength{\topmargin}{-1.5cm} \addtolength{\parskip}{2ex}
 \setlength{\headsep}{1.5cm}
 
+
 \renewcommand{\contentsname}{Continguts}
 %\renewcommand{\chaptername}{Pr\`actica}
 \setcounter{chapter}{0}
+
+
+
 \begin{document}
 
 \title{Treball 1: Matrius disperses}
@@ -440,22 +460,287 @@ Això ens suposaria un increment del ús de memòria i ens obligaria a increment
 Per resoldre qualsevol sistema d'equacions representat amb una matriu dispersa, seguirem els següents passos:
 
 \begin{enumerate}
-	\item Determinar l'estructura símbolica de $A$.
+	\item Determinar l'estructura simbòlica de $A$.
 	\item Obtenir les permutacions $P$ i $Q$, tals que $PAQ$ tingui una estructura de densitat òptima(no genera elements de \textit{fill-in}).
 	\item Fer factorització LU: $LU = PAQ$ i $c = Pb$.
 	\item Resoldre $Lz = c, Uy = z$ i $x=Qy$.
 \end{enumerate}
 
-\subsection{Determinació de l'estructura símbolica de la matriu}
+\subsection{Determinació de l'estructura simbòlica de la matriu}
 
-Per poder fer el següent apartat, la reordenació, primer cal saber com és la matriu que tenim, posat que en funció d'aixó requerirem d'un algoritme diferent. Per exemple, amb matrius simètriques, hi ha un gran nombre de algoritmes per fer la reordenació més eficientment. En canvi per matrius no simètriques, els algoritmes necessàris són uns altres.
+Per poder fer el següent apartat, la reordenació, primer cal saber com és la matriu que tenim, posat que en funció d'això requerirem d'un algoritme diferent. Per exemple, amb matrius simètriques, hi ha un gran nombre de algoritmes per fer la reordenació més eficientment. En canvi per matrius no simètriques, els algoritmes necessaris són uns altres.
 
 Per saber-ho fem una representació simbòlica de com és la matriu d'equacions.
 
 \subsection{Mètodes de reordenació}
 
+Com hem vist amb anterioritat, reordenar les matrius de forma correcta és de vital importància, presentant tres millores fundamentals:
+
+\begin{itemize}
+	\item La disminució de la memòria necessària per emmagatzemar la matriu generada en el procés de factorització.
+	\item La disminució del nombre de càlculs a realitzar, reduint el temps total de càlcul.
+	\item La millora de l'estabilitat numèrica del procés global de resolució del sistema al disminuir el nombre de coeficient a considerar, reduint així la possible acumulació d'error en la resolució del sistema.
+\end{itemize}
+
+Per aconseguir això tenim diferents mètodes, en funció de l'estructura simbòlica de la matriu sobre la que estem treballant, i de com aquesta estigui emmagatzemada.
+ 
+En el cas de que la matriu tingui una estructura simètrica i s'emmagatzemi amb un esquema de perfil, també ens interessarà una ordenació que agrupi els elements a prop de la diagonal principal. Per aquest propòsit existeix l'\textbf{algoritme de Cuthill-Mckee}.
+
+Altres mètodes per matrius d'estructura simètrica són: la \textbf{eliminació de Gauss mitjançant grafs} i l'\textbf{algoritme del grau mínim}.
 
 
+Per ordenar matrius disperses d'estructura no simètrica existeixen diversos mètodes, entre ells el més utilitzat és l'ordenació amb estructura triangular inferior en blocs.
+
+\subsubsection{Representació d'una matriu amb grafs}
+
+Com ja em vist a classe en anys anteriors, un graf és un parell format per un conjunt finit de vèrtexs, i un altre conjunt finit de arestes. Es podria representar així: $G = (V,A)$, on $V$ és el conjunt de vèrtexs i $A$ el conjunt d'arestes.
+
+Una aresta està formada per dos vèrtexs. Si les arestes d'un graf estan ordenades, en direm digraf o graf dirigit. Si no, en direm graf no dirigit, o graf a seques.
+
+El grau d'un vèrtex és el numero de vèrtexs veïns que té, és a dir, el nombre de vèrtexs units a ell. En un graf dirigit, podem separar-lo en grau d'entrada i grau de sortida, sent aquests el nombre d'arestes que en surten i el nombre d'arestes que hi arriben respectivament.
+
+
+A qualsevol matriu quadrada $n \times n$ se li pot associar un digraf amb $n$ nodes.
+
+Aquest graf $G^A = (V^A, E^A)$, les arestes $E^A$ són tals que:
+\[(v_i,v_j) \in E^A \Leftrightarrow	a_{ij} \neq 0\]
+
+A qualsevol coeficient diagonal $a_{ii}$ també li correspon una aresta circular en el vèrtex, en cas de que tots els elements de la diagonal fossin no nuls, no es representen aquestes arestes.
+
+
+\paragraph*{Exemple}
+
+
+\[
+\begin{bmatrix}
+x	&	0	&	x	&	x	&	0	\\
+0	&	x	&	0	&	x	&	x	\\ 
+0	&	0	&	x	&	0	&	0	\\
+0	&	0	&	x	&	x	&	0	\\
+0	&	x	&	0	&	0	&	x	\\
+\end{bmatrix} \longrightarrow
+\mathord{\vcenter{ \hbox{ \begin{tikzpicture}[
+            > = stealth, % arrow head style
+            shorten > = 1pt, % don't touch arrow head to node
+            auto,
+            node distance = 3cm, % distance between nodes
+            semithick % line style
+        ]
+
+        \tikzstyle{every state}=[
+            draw = black,
+            thick,
+            fill = white,
+            minimum size = 4mm
+        ]
+
+        \node[state] (v1) {$1$};
+        \node[state] (v2) [below = 1.5cm of v1] {$2$};
+        \node[state] (v3) [right of=v1] {$3$};
+        \node[state] (v4) [below=0.5cm of v3] {$4$};
+        \node[state] (v5) [below =0.5cm of v4] {$5$};
+
+        \path[->] (v1) edge node {}(v3);
+        \path[->] (v1) edge node {} (v4);
+        \path[->] (v2) edge node {} (v4);
+        \path[->] (v4) edge node {} (v3);
+        \double{v5}{v2}
+        \path[->] (v2-v5-s) edge node {} (v2-v5-e);
+		\path[->] (v5-v2-s) edge node {} (v5-v2-e);
+       \end{tikzpicture}
+    }}}
+    \]    
+
+\paragraph*{Propietat important} \mbox{}
+
+Si a una matriu se li efectuen permutacions simètriques, en el seu digraf associat només es modifica la enumeració dels nodes.
+
+\subsubsection{Reordenació en matrius disperses no simètriques}
+
+Si al sistema d'equacions $Ax=b$ se li apliquen unes permutacions a l'esquerra i a la dreta representades per les matrius $P$ i $Q$, el sistema original es reescriu:
+\[PAQQ^Tx = Pb \qquad \qquad \text{on $QQ^T = I$.}\]
+
+
+Podem simplificar-ho com a:
+\[By = c \qquad \qquad \text{on $B = PAQ$ és la matriu $A$ reordenada.} \]
+
+Si $A$ no té cap estructura especial, sempre es pot reordenar de forma triangular en blocs : 
+\[
+\begin{pmatrix}
+A_{11}	\\
+A_{21}	&	A_{22}	\\
+\vdots		&	& \ddots	&	\\
+A_{n1}	&	A_{n2}	&	\dots	&	A_{nn}	\\
+\end{pmatrix}
+\begin{bmatrix}
+x_1 \\ x_2 \\ \vdots \\ x_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+b_1 \\ b_2 \\ \vdots \\ b_n
+\end{bmatrix}
+\]
+
+on els $A_{ij}$ son matrius, sent les $A_{ii}$ quadrades de ordre $n_i$: $\sum_{i = 1}^n n_i = n$
+
+\paragraph*{Eliminació de Gauss en matrius generals disperses} \mbox{}
+
+Si el sistema no presenta una estructura de dispersió especial, i tampoc ens interessa triangularitzar-la per blocs, la forma més general de resoldre-la consisteix en utilitzar directament la eliminació de Gauss tenint en compte que la matriu es dispersa.
+
+Per fer-ho s'usa el criteri de Markowitz, de Harry Max Markowitz.
+
+Consisteix en factoritzar la matriu mitjançant l'eliminació de Gauss amb pivotació, triant com a element pivot en una etapa $k$ un $a_{ij}^k$ numèricament acceptable i que minimitzi $(r_i^k - 1)(c_i^k - 1)$, on $r_i^k$ és el numero de coeficients no zero en la fila $i$ de la sub-matriu activa i $c_i^k$ els no nuls en la columna $j$.
+
+\subsubsection{Estructura triangular en blocs}
+
+El procediment per triangular per blocs una matriu A consisteix en dues fases:
+\begin{enumerate}
+\item Trobar la transversal completa d'aquesta matriu.
+\item Reordenar el resultat del pas anterior utilitzant permutacions simètriques.
+\end{enumerate}
+
+Qualsevol Matriu A es pot reordenar de tal forma que $PAQ$ tingui una transversal completa. Si la matriu és singular (el seu determinant és 0) això pot no ser cert.
+
+Amb transversal completa, pot reordenar-se la matriu utilitzant permutacions simètriques per aconseguir una estructura triangular inferior en blocs.
+
+\begin{itemize}
+\item Si per una matriu $A$ existeix una estructura triangular inferior en blocs, en direm matriu reductible.\\
+\item si una matriu no té transversal completa, preo pot reordenar-se de tal forma que en tingui, i reordenada sigui reductible, en direm birreductible.
+\end{itemize}
+
+\paragraph{Transversal completa} \mbox{}
+
+Per trobar una matriu $B$ a partir de permutar files i columnes de $A$, de forma que la matriu obtinguda tingui transversal completa, usarem l'algoritme de Hall.
+
+L'algoritme de Hall requereix de $n$ iteracions per a una matriu de mida $n \times n$ en les quals, per cada una d'elles, mira si el coeficient corresponent de la diagonal és diferent de zero, i si no ho és, hi co\l.loca un element diferent de zero.
+
+Estant en la iteració $it = k+1$, per tant s'han realitzat $k$ iteracions, i els $k$ primers elements de la diagonal sabem que ja són diferents de zero. 
+
+En la iteració $it$, es poden donar 3 casos:
+
+\begin{itemize}
+\item $a_{it it} \neq 0$: no s'ha de fer res.
+\item  $a_{it it} = 0$ i existeixen coeficients no nuls en la sub-matriu activa\footnote{La sub-matriu quadrada formada per la diagonal des de $(it,it)$ fins a $(n,n)$.}
+\begin{itemize}
+\item Fem els intercanvis de files i columnes necessaris per portar un d'aquests coeficients a la posició $(it, it)$.
+\end{itemize}
+\item Que només existeixin coeficients no nuls en la sub-matriu activa\footnotemark[\value{footnote}]
+\begin{itemize}
+\item Mitjançant el mètode del cami creixent es pot aconseguir co\l.locar un coeficient diferent de zero a $a_{it it}$. Si es donés el cas de que no existís aquest camí, voldria dir que la matriu és singular.
+\end{itemize}
+\end{itemize}
+
+\paragraph{Traçat del camí creixent} \mbox{}
+
+En la iteració $it$:
+\begin{itemize}
+\item Recorrem la fila $it$ fins a trobar un coeficient no nul, en una columna $l$ (tal columna ha d'existir, sinó voldria dir que tots els coeficients de la fila $it$ són 0, i per tant la matriu seria singular).
+\item Ens desplacem a la posició $(l,l)$, i tornem a aplicar el pas anterior des de el nou punt.
+\end{itemize}
+ 
+L'algoritme acabarà en un coeficient diferent de zero en la sub-matriu definida per les files de $1$ a $k$ i les columnes $k+1$ a $n$.
+
+\paragraph*{Propietat:}Aquest camí no pot passar per una fila o columna més d'un cop i per tant, tampoc un mateix coeficient de la diagonal.
+
+\paragraph{Obtenció de l'estructura triangular inferior per blocs} \mbox{}
+
+Havent obtingut una matriu amb transversal completa, la següent fase per arribar a una matriu triangular en blocs consisteix en trobar una altre permutació que ens generi
+\[\begin{pmatrix}
+B_{11}	\\
+B_{21}	&	B_{22}	\\
+\vdots		&	& \ddots	&	\\
+B_{n1}	&	B_{n2}	&	\dots	&	B_{nn}	\\
+\end{pmatrix}\]
+on cada bloc diagonal $B_ii$ no es pugui reduir més.
+
+Els algoritmes per aconseguir això es basen en trobar cicles fortament connexos\footnote{Eren aquells cicles en els quals podies arribar a qualsevol vertex del cicle des d'un d'aquests.} en el digraf associat.
+
+Si existissin dos cicles fortament connexos i re-enumeréssim els vèrtexs de tal forma que els del primer cicle fossin els vèrtexs de  $1$ a $k$ i els del segon de $k+1$ fins a $n$, obtindríem una matriu triangular inferior en dos blocs, el primer amb $k$ columnes, i el segon amb $n-k$. 
+
+\paragraph*{Exemple}\mbox{}
+
+\[ A = 
+\begin{bmatrix}
+x	&	0	&	x	&	x	&	0	\\
+0	&	x	&	0	&	x	&	x	\\ 
+0	&	0	&	x	&	0	&	0	\\
+0	&	0	&	x	&	x	&	0	\\
+0	&	x	&	0	&	0	&	x	\\
+\end{bmatrix} \longrightarrow G_A =
+\mathord{\vcenter{ \hbox{ \begin{tikzpicture}[
+            > = stealth, % arrow head style
+            shorten > = 1pt, % don't touch arrow head to node
+            auto,
+            node distance = 3cm, % distance between nodes
+            semithick % line style
+        ]
+
+        \tikzstyle{every state}=[
+            draw = black,
+            thick,
+            fill = white,
+            minimum size = 4mm
+        ]
+
+        \node[state] (v1) {$1$};
+        \node[state] (v2) [below = 1.5cm of v1] {$2$};
+        \node[state] (v3) [right of=v1] {$3$};
+        \node[state] (v4) [below=0.5cm of v3] {$4$};
+        \node[state] (v5) [below =0.5cm of v4] {$5$};
+
+        \path[->] (v1) edge node {}(v3);
+        \path[->] (v1) edge node {} (v4);
+        \path[->] (v2) edge node {} (v4);
+        \path[->] (v4) edge node {} (v3);
+        \double{v5}{v2}
+        \path[->] (v2-v5-s) edge node {} (v2-v5-e);
+		\path[->] (v5-v2-s) edge node {} (v5-v2-e);
+       \end{tikzpicture}
+    }}}
+    \]    
+
+Com veiem $G_A$ té dos cicles fortament connexos, el primer format, per $(1,3,4)$ i el segon format per $(2,5)$. Re-enumerant $(1,3,4)$ per $(1,2,3)$ i $(2,5)$ per $(4,5)$, ens donaria el següent graf $G_B$ representant a la matriu $B$:
+
+\[G_B =
+\mathord{\vcenter{ \hbox{ \begin{tikzpicture}[
+            > = stealth, % arrow head style
+            shorten > = 1pt, % don't touch arrow head to node
+            auto,
+            node distance = 3cm, % distance between nodes
+            semithick % line style
+        ]
+
+        \tikzstyle{every state}=[
+            draw = black,
+            thick,
+            fill = white,
+            minimum size = 4mm
+        ]
+
+        \node[state] (v1) {$1$};
+        \node[state] (v2) [below = 1.5cm of v1] {$4$};
+        \node[state] (v3) [right of=v1] {$2$};
+        \node[state] (v4) [below=0.5cm of v3] {$3$};
+        \node[state] (v5) [below =0.5cm of v4] {$5$};
+
+        \path[->] (v1) edge node {}(v3);
+        \path[->] (v1) edge node {} (v4);
+        \path[->] (v2) edge node {} (v4);
+        \path[->] (v4) edge node {} (v3);
+        \double{v5}{v2}
+        \path[->] (v2-v5-s) edge node {} (v2-v5-e);
+		\path[->] (v5-v2-s) edge node {} (v5-v2-e);
+       \end{tikzpicture}
+    }}}  \longrightarrow 
+    B = 
+\begin{bmatrix}
+x	&	x	&	x	&	0	&	0	\\
+0	&	x	&	0	&	0	&	0	\\ 
+0	&	0	&	x	&	0	&	0	\\
+0	&	0	&	x	&	x	&	x	\\
+0	&	0	&	0	&	x	&	x	\\
+\end{bmatrix}
+    \]    
 
 
 %http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
