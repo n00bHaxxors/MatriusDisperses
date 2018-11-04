@@ -484,7 +484,7 @@ Com hem vist amb anterioritat, reordenar les matrius de forma correcta és de vi
 
 Per aconseguir això tenim diferents mètodes, en funció de l'estructura simbòlica de la matriu sobre la que estem treballant, i de com aquesta estigui emmagatzemada.
  
-En el cas de que la matriu tingui una estructura simètrica i s'emmagatzemi amb un esquema de perfil, també ens interessarà una ordenació que agrupi els elements a prop de la diagonal principal. Per aquest propòsit existeix l'\textbf{algoritme de Cuthill-Mckee}.
+En el cas que la matriu tingui una estructura simètrica i s'emmagatzemi amb un esquema de perfil, també ens interessarà una ordenació que agrupi els elements a prop de la diagonal principal. Per aquest propòsit existeix l'\textbf{algoritme de Cuthill-Mckee}.
 
 Altres mètodes per matrius d'estructura simètrica són: la \textbf{eliminació de Gauss mitjançant grafs} i l'\textbf{algoritme del grau mínim}.
 
@@ -505,7 +505,7 @@ A qualsevol matriu quadrada $n \times n$ se li pot associar un digraf amb $n$ no
 Aquest graf $G^A = (V^A, E^A)$, les arestes $E^A$ són tals que:
 \[(v_i,v_j) \in E^A \Leftrightarrow	a_{ij} \neq 0\]
 
-A qualsevol coeficient diagonal $a_{ii}$ també li correspon una aresta circular en el vèrtex, en cas de que tots els elements de la diagonal fossin no nuls, no es representen aquestes arestes.
+A qualsevol coeficient diagonal $a_{ii}$ també li correspon una aresta circular en el vèrtex, en cas que tots els elements de la diagonal fossin no nuls, no es representen aquestes arestes.
 
 
 \paragraph*{Exemple}
@@ -626,7 +626,7 @@ En la iteració $it$, es poden donar 3 casos:
 \end{itemize}
 \item Que només existeixin coeficients no nuls en la sub-matriu activa\footnotemark[\value{footnote}]
 \begin{itemize}
-\item Mitjançant el mètode del cami creixent es pot aconseguir co\l.locar un coeficient diferent de zero a $a_{it it}$. Si es donés el cas de que no existís aquest camí, voldria dir que la matriu és singular.
+\item Mitjançant el mètode del cami creixent es pot aconseguir co\l.locar un coeficient diferent de zero a $a_{it it}$. Si es donés el cas que no existís aquest camí, voldria dir que la matriu és singular.
 \end{itemize}
 \end{itemize}
 
@@ -741,6 +741,39 @@ x	&	x	&	x	&	0	&	0	\\
 0	&	0	&	0	&	x	&	x	\\
 \end{bmatrix}
     \]    
+\chapter{Aplicacions de factorització LU.}
+
+\section{Introducció}
+
+\chapter{Estalvi de rendiment i espai.}
+
+\section{Espai}
+
+\subsection{General}
+
+Representar una matriu en forma dispersa ens permetrà estalviar espai de memòria respecte a la seva versió densa.
+Podriem dir que l'espai de memòria que ocupa una matriu densa seria donat per la formula $E=C^n$ on $E$ seria el nombre d'elements a guardar, $C$ seria el tamany del costat, i $n$ seria el seu número de dimensions.
+De la mateixa forma, podríem definir el tamany mínim que ocupa una matriu dispersa com a $E=(C^n)-X$ on $E$ seria el nombre d'elements a guardar, $C$ seria el tamany del costat, $n$ seria el seu número de dimensions i $X$ seria el nombre d'elements de la matriu iguals a zero.
+
+
+Per exemple, amb una matriu diagonal de 10000x10000, en forma densa tindria 100000000 elements, i en forma dispersa podria arribar a ocupar només 10000 elements.
+\subsubsection{Per coordenades}
+
+Utilitzant el mètode de representació per coordenades, podriem calcular el nombre d'elements a guardar amb la formula $E=((C^n)-X)*(n+1)$.
+Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia tant sols 30000 elements.
+
+\subsubsection{Per files}
+
+Utilitzant el mètode de representació per files, podriem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)*3+1$.
+Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia 30001 elements. No obstant, si la matriu tingués més elements
+escalaria millor que usant el mètode de coordenades.
+
+\subsubsection{Per perfil}
+
+Utilitzant el mètode de representació per perfil, podriem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)+numIndexos+C+1$.
+Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia $20001+numIndexos$ elements. Com podem veure, aquest mètode ens depèn de la quantita de valors a prop de la diagonal, i ens podria ser útil per a matrius banda
+
+\section{Temps}
 
 
 %http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
