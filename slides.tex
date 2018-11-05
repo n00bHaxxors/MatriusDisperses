@@ -1,0 +1,191 @@
+\documentclass{beamer}
+\usetheme{Ilmenau}
+\usecolortheme{dolphin}
+  \usepackage{epsfig}
+  \usepackage{amsmath}
+  \usepackage{tabu}
+  \usepackage{amsfonts}
+  \usepackage{latexsym}
+  \usepackage[utf8]{inputenc}
+  \usepackage{listings}
+  \usepackage[catalan]{babel}
+  \usepackage{newunicodechar}
+  \usepackage{graphicx}
+  \usepackage{subcaption}
+  \usepackage{float}
+  \usepackage[numbered,framed]{matlab-prettifier}
+  \usepackage{pgf, tikz}
+  \usetikzlibrary{arrows, automata, positioning}
+
+\newunicodechar{Ŀ}{\L.}
+\newunicodechar{ŀ}{\l.}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+language=Matlab,
+aboveskip=3mm,
+belowskip=3mm,
+showstringspaces=false,
+columns=flexible,
+basicstyle={\small\ttfamily},
+numbers=none,
+numberstyle=\tiny\color{gray},
+keywordstyle=\color{blue},
+commentstyle=\color{dkgreen},
+stringstyle=\color{mauve},
+breaklines=true,
+breakatwhitespace=true,
+tabsize=3,
+extendedchars=true,
+literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ï}{{\"i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1 {ü}{{\"u}}1 {ç}{{\c{c}}}1
+			{Á}{{\'A}}1 {À}{{\`A}}1 {Ã}{{\~A}}1 {É}{{\'E}}1 {È}{{\`E}}1 {Í}{{\'I}}1 {Ï}{{\"I}}1 {Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ú}{{\'U}}1 {Ü}{{\"U}}1 {Ç}{{\c{C}}}1
+}
+
+\newcommand\double[3][10]{%Passantli A i B genera quatre vertexs virtuals A-B-s, A-B-e (per resepresentar una aresta) i B-A-s, B-A-e (per representar l'altre aresta)
+  \draw (#2)
+    edge [bend left=#1,draw=none]
+    coordinate[at start](#2-#3-s)
+    coordinate[at end](#2-#3-e)
+    (#3)
+    edge [bend right=#1,draw=none]
+    coordinate[at start](#3-#2-e)
+    coordinate[at end](#3-#2-s)
+    (#3);
+}
+
+\title{Matrius Disperses}
+\author{Marc Cané \and Ismael El Habri \and Lluís Trilla}
+
+\date[KPT 2004] % (optional)
+{7 de novembre de 2018}
+\subject{Computació Numèrica i Simulació}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Què són les matrius disperses?}
+  \begin{frame}
+    \frametitle{Què són les matrius disperses?}
+    Quan parlem de matrius disperses ens referim a matrius de gran tamany en la qual la majoria d'elements son zero. Direm que 
+una matriu és disperrsa, quan hi hagi benefici en aplicar els mètodes propis d'aquestes. 
+  \end{frame}
+  \begin{frame}
+   Per identificar si una matriu és dispersa, podem usar el seguent:
+
+Una matriu $n \times n$ serà dispersa si el número de coeficients no nuls es $n^{\gamma+1}$, on $\gamma < 1$.
+
+En funció del poblema, decidim el valor del paràmetre $\gamma$. Aquí hi ha els valors típics de $\gamma$:]
+\begin{itemize}
+\item $\gamma=0.2$ per problemes d'anàlisi de sistemes eléctics degeneració i de transpot d'enegía.
+\item $\gamma=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructues.
+\end {itemize}
+  \end{frame}
+  
+  \subsection{Tipus de matrius disperses}
+  \begin{frame}
+  \frametitle{Tipus de matrius disperses}
+Podem trobar dos tipus de matrius disperses:
+\begin{itemize}
+\item \textbf{Matrius estructurades:} matrius en les quals els elements diferents de zero formen un patró regular. Exemple: Les matrius banda.
+\item \textbf{Matrius no estructurades:} els elements diferents de zero es distribueixen de forma irregular.
+\end{itemize}  
+  \end{frame}
+  
+%
+%Formes d'emmagatzemar
+%  
+
+\section[Emmagatzematge]{Formes d'emmagatzemar matrius disperses}
+\subsection{Per Coordenades}
+\begin{frame}
+\frametitle{Per Coordenades}
+És la primera aproximació que podríem pensar i és bastant intuïtiva. Per cada element no nul guardem una tupla amb el valor i les seves coordenades: $(a_{i j}, i, j)$. 
+
+A la realitat però, aquest mètode d'emmagatzemar les dades és poc eficient quan hem de fer operacions amb les matrius.
+
+\end{frame}
+\begin{frame}
+\frametitle{Exemple}
+\[    
+\begin{pmatrix}
+	1	&	0	& 0	&	2	\\
+	0	&	1	&	0	&	0	\\
+	0	&	0	&	0	&	0	\\
+	3	&	0	&	-2	&	0	\\
+\end{pmatrix}   
+\qquad = \qquad
+    \begin{tabu}{l|c}
+    	$índex$	&	$tupla$ (a_{i j}, i, j)	\\
+    	\hline
+    	0	&	(1, 1, 1) \\
+    	1	&	(2, 1, 4) \\
+    	2	& (1, 2, 2) \\
+    	3	& (3, 4, 1) \\
+    	4	& (-2, 4,3)	\\ 
+    \end{tabu}  
+\]
+\end{frame}
+\begin{frame}
+Usem tres vectors de la mateixa mida ($n_z$, el nombre d'elements diferents de zero): Un amb els valors, un amb les files i un amb les columnes:
+\begin{center}
+	\begin{tabular}{l|c c c c c}
+		Vector & \multicolumn{5}{c}{Coeficients}\\
+		\hline
+		valors			&	1	&	2	&	1 &	3	&	-2	\\
+		files				&	1	&	1	&	2	&	4	&	4	\\
+		columnes	&	1	&	4	&	2	&	1	&	3	\\ 	
+	\end{tabular}	
+\end{center}
+\end{frame}
+
+
+\subsection{Per Files}
+\begin{frame}
+\frametitle{Per Files}
+També conegut com a \textit{Compressed Sparse Rows (CSR)}, \textit{Compressed Row Storage (CRS)}, o format \textit{Yale}. És el mètode més estès.
+
+Consisteix en guardar els elements ordenats per files, guardar la columna on es troben, i la posició del primer element de cada fila en el vector de valors.
+Així ens quedaran tres vectors:
+\begin{itemize}
+	\item \textbf{valors:} de mida $n_z$, conté tots els valors diferents.
+	\item \textbf{columnes:} també de mida $n_z$, conté la columna on es troba cada un dels elements anteriors.
+	\item \textbf{iniFiles:} de mida $m+1$, conté la posició on comença cada fila en els vectors valors i columnes, sent $m$ el nombre de files de la matriu. 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemple}
+\[    
+\begin{pmatrix}
+	1	&	0	& 0	&	2	\\
+	0	&	1	&	0	&	0	\\
+	0	&	0	&	0	&	0	\\
+	3	&	0	&	-2	&	0	\\
+\end{pmatrix}   \qquad = \qquad
+\begin{tabu}{l|c c c c c}
+		$Vector$ & \multicolumn{5}{c}{$Coeficients$}\\
+		\hline
+		$índex$			&	1	&	2	&	3	&	4	&	5	\\
+		\hline
+		$valors$			&	1	&	2	&	1 &	3	&	-2	\\
+		$columnes$	&	1	&	4	&	2	&	1	&	3	\\ 	
+		$iniFiles$			& 1	&	3	&	4	&	4 &	6 \\
+\end{tabu}		\]
+
+Si es canvien files per columnes, dona la implementació per columnes, o també anomenada \textit{Compressed Sparse Columns (CSC)}.
+
+\end{frame}
+  
+\end{document}
