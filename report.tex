@@ -453,7 +453,7 @@ Suposem que apliquem el mètode de Gauss en una matriu dispersa, podem veure mar
 
 %Si apliquem un mètode de reordenació de files i columnes com l'algoritme de grau mínim aconseguirem minimitzar o fins i tot fer desaparèixer els elements de fill-in estalviant memòria, operacions innecessàries i millorant l'estabilitat numèrica de tota la operació.
 
-Això ens suposaria un increment del ús de memòria i ens obligaria a incrementar molt el número d'operacions, augmentant la complexitat numèrica. Així doncs, ens interessa reordenar files i columnes per tal de reduir o fins i tot desfer-nos dels elements de \textit{fill-in}. 
+Això ens suposaria un increment de l'ús de memòria i ens obligaria a incrementar molt el número d'operacions, augmentant la complexitat numèrica. Així doncs, ens interessa reordenar files i columnes per tal de reduir o fins i tot desfer-nos dels elements de \textit{fill-in}. 
 
 \section{Resolució de grans sistemes d'equacions lineals}
 
@@ -461,14 +461,14 @@ Per resoldre qualsevol sistema d'equacions representat amb una matriu dispersa, 
 
 \begin{enumerate}
 	\item Determinar l'estructura simbòlica de $A$.
-	\item Obtenir les permutacions $P$ i $Q$, tals que $PAQ$ tingui una estructura de densitat òptima(no genera elements de \textit{fill-in}).
+	\item Obtenir les permutacions $P$ i $Q$, tals que $PAQ$ tingui una estructura de densitat òptima (no genera elements de \textit{fill-in}).
 	\item Fer factorització LU: $LU = PAQ$ i $c = Pb$.
 	\item Resoldre $Lz = c, Uy = z$ i $x=Qy$.
 \end{enumerate}
 
 \subsection{Determinació de l'estructura simbòlica de la matriu}
 
-Per poder fer el següent apartat, la reordenació, primer cal saber com és la matriu que tenim, posat que en funció d'això requerirem d'un algoritme diferent. Per exemple, amb matrius simètriques, hi ha un gran nombre de algoritmes per fer la reordenació més eficientment. En canvi per matrius no simètriques, els algoritmes necessaris són uns altres.
+Per poder fer el següent apartat, la reordenació, primer cal saber com és la matriu que tenim, ja que en funció d'això requerirem d'un algoritme diferent. Per exemple, amb matrius simètriques, hi ha un gran nombre de algoritmes per fer la reordenació més eficientment. En canvi per matrius no simètriques, els algoritmes necessaris són uns altres.
 
 Per saber-ho fem una representació simbòlica de com és la matriu d'equacions.
 
@@ -486,26 +486,26 @@ Per aconseguir això tenim diferents mètodes, en funció de l'estructura simbò
  
 En el cas que la matriu tingui una estructura simètrica i s'emmagatzemi amb un esquema de perfil, també ens interessarà una ordenació que agrupi els elements a prop de la diagonal principal. Per aquest propòsit existeix l'\textbf{algoritme de Cuthill-Mckee}.
 
-Altres mètodes per matrius d'estructura simètrica són: la \textbf{eliminació de Gauss mitjançant grafs} i l'\textbf{algoritme del grau mínim}.
+Altres mètodes per matrius d'estructura simètrica són: l'\textbf{eliminació de Gauss mitjançant grafs} i l'\textbf{algoritme del grau mínim}.
 
 
 Per ordenar matrius disperses d'estructura no simètrica existeixen diversos mètodes, entre ells el més utilitzat és l'ordenació amb estructura triangular inferior en blocs.
 
 \subsubsection{Representació d'una matriu amb grafs}
 
-Com ja em vist a classe en anys anteriors, un graf és un parell format per un conjunt finit de vèrtexs, i un altre conjunt finit de arestes. Es podria representar així: $G = (V,A)$, on $V$ és el conjunt de vèrtexs i $A$ el conjunt d'arestes.
+Com ja hem vist a classe en anys anteriors, un graf és un parell format per un conjunt finit de vèrtexs i un altre conjunt finit d'arestes. Es podria representar així: $G = (V,A)$, on $V$ és el conjunt de vèrtexs i $A$ el conjunt d'arestes.
 
-Una aresta està formada per dos vèrtexs. Si les arestes d'un graf estan ordenades, en direm digraf o graf dirigit. Si no, en direm graf no dirigit, o graf a seques.
+Una aresta està formada per dos vèrtexs. Si les arestes d'un graf estan ordenades en direm digraf o graf dirigit. Si no, en direm graf no dirigit, o graf a seques.
 
 El grau d'un vèrtex és el numero de vèrtexs veïns que té, és a dir, el nombre de vèrtexs units a ell. En un graf dirigit, podem separar-lo en grau d'entrada i grau de sortida, sent aquests el nombre d'arestes que en surten i el nombre d'arestes que hi arriben respectivament.
 
 
 A qualsevol matriu quadrada $n \times n$ se li pot associar un digraf amb $n$ nodes.
 
-Aquest graf $G^A = (V^A, E^A)$, les arestes $E^A$ són tals que:
+En aquest graf $G^A = (V^A, E^A)$, les arestes $E^A$ són tals que:
 \[(v_i,v_j) \in E^A \Leftrightarrow	a_{ij} \neq 0\]
 
-A qualsevol coeficient diagonal $a_{ii}$ també li correspon una aresta circular en el vèrtex, en cas que tots els elements de la diagonal fossin no nuls, no es representen aquestes arestes.
+A qualsevol coeficient diagonal $a_{ii}$ també li correspon una aresta circular en el vèrtex, en cas que tots els elements de la diagonal fossin no nuls, aquestes arestes no es representen.
 
 
 \paragraph*{Exemple}
@@ -553,7 +553,7 @@ x	&	0	&	x	&	x	&	0	\\
 
 \paragraph*{Propietat important} \mbox{}
 
-Si a una matriu se li efectuen permutacions simètriques, en el seu digraf associat només es modifica la enumeració dels nodes.
+Si a una matriu se li efectuen permutacions simètriques, en el seu digraf associat només es modifica l'enumeració dels nodes.
 
 \subsubsection{Reordenació en matrius disperses no simètriques}
 
@@ -585,7 +585,7 @@ on els $A_{ij}$ son matrius, sent les $A_{ii}$ quadrades de ordre $n_i$: $\sum_{
 
 \paragraph*{Eliminació de Gauss en matrius generals disperses} \mbox{}
 
-Si el sistema no presenta una estructura de dispersió especial, i tampoc ens interessa triangularitzar-la per blocs, la forma més general de resoldre-la consisteix en utilitzar directament la eliminació de Gauss tenint en compte que la matriu es dispersa.
+Si el sistema no presenta una estructura de dispersió especial, i tampoc ens interessa triangularitzar-la per blocs, la forma més general de resoldre-la consisteix en utilitzar directament l'eliminació de Gauss tenint en compte que la matriu és dispersa.
 
 Per fer-ho s'usa el criteri de Markowitz, de Harry Max Markowitz.
 
@@ -599,20 +599,20 @@ El procediment per triangular per blocs una matriu A consisteix en dues fases:
 \item Reordenar el resultat del pas anterior utilitzant permutacions simètriques.
 \end{enumerate}
 
-Qualsevol Matriu A es pot reordenar de tal forma que $PAQ$ tingui una transversal completa. Si la matriu és singular (el seu determinant és 0) això pot no ser cert.
+Qualsevol matriu A es pot reordenar de tal forma que $PAQ$ tingui una transversal completa. Si la matriu és singular (el seu determinant és 0) això pot no ser cert.
 
-Amb transversal completa, pot reordenar-se la matriu utilitzant permutacions simètriques per aconseguir una estructura triangular inferior en blocs.
+Amb la transversal completa, pot reordenar-se la matriu utilitzant permutacions simètriques per aconseguir una estructura triangular inferior en blocs.
 
 \begin{itemize}
 \item Si per una matriu $A$ existeix una estructura triangular inferior en blocs, en direm matriu reductible.\\
-\item si una matriu no té transversal completa, preo pot reordenar-se de tal forma que en tingui, i reordenada sigui reductible, en direm birreductible.
+\item Si una matriu no té transversal completa, però pot reordenar-se de tal forma que en tingui i, un cop reordenada, continuï siguent reductible, en direm birreductible.
 \end{itemize}
 
 \paragraph{Transversal completa} \mbox{}
 
 Per trobar una matriu $B$ a partir de permutar files i columnes de $A$, de forma que la matriu obtinguda tingui transversal completa, usarem l'algoritme de Hall.
 
-L'algoritme de Hall requereix de $n$ iteracions per a una matriu de mida $n \times n$ en les quals, per cada una d'elles, mira si el coeficient corresponent de la diagonal és diferent de zero, i si no ho és, hi co\l.loca un element diferent de zero.
+L'algoritme de Hall requereix de $n$ iteracions per una matriu de mida $n \times n$ en les quals, mira si el coeficient corresponent de la diagonal és diferent de zero, i si no ho és, hi co\l.loca un element diferent de zero.
 
 Estant en la iteració $it = k+1$, per tant s'han realitzat $k$ iteracions, i els $k$ primers elements de la diagonal sabem que ja són diferents de zero. 
 
@@ -635,7 +635,7 @@ En la iteració $it$, es poden donar 3 casos:
 En la iteració $it$:
 \begin{itemize}
 \item Recorrem la fila $it$ fins a trobar un coeficient no nul, en una columna $l$ (tal columna ha d'existir, sinó voldria dir que tots els coeficients de la fila $it$ són 0, i per tant la matriu seria singular).
-\item Ens desplacem a la posició $(l,l)$, i tornem a aplicar el pas anterior des de el nou punt.
+\item Ens desplacem a la posició $(l,l)$ i tornem a aplicar el pas anterior des del nou punt.
 \end{itemize}
  
 L'algoritme acabarà en un coeficient diferent de zero en la sub-matriu definida per les files de $1$ a $k$ i les columnes $k+1$ a $n$.
@@ -651,7 +651,7 @@ B_{21}	&	B_{22}	\\
 \vdots		&	& \ddots	&	\\
 B_{n1}	&	B_{n2}	&	\dots	&	B_{nn}	\\
 \end{pmatrix}\]
-on cada bloc diagonal $B_ii$ no es pugui reduir més.
+on cada bloc diagonal $B_{ii}$ no es pugui reduïr més.
 
 Els algoritmes per aconseguir això es basen en trobar cicles fortament connexos\footnote{Eren aquells cicles en els quals podies arribar a qualsevol vertex del cicle des d'un d'aquests.} en el digraf associat.
 
