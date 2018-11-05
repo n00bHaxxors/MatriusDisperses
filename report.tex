@@ -249,7 +249,7 @@ Anomenem ample de banda de la matriu a $p + q - 1$.
 
 L'\textbf{envoltant} de una matriu banda consisteix en tots els elements de cada fila des de el primer no nul fins al ultim no nul, incloent els elements nuls que hi pugui haver entre mig.  Aquí la definició formal:
 
-L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) = \{i, j\} : f_i \leq j \leq l_i, 1 \leq i \leq n $ on $f_i$ és on comencen els valors no nuls de la fila i, i $l_i$ on acaben els valors no nuls de la fila i.
+L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) = \{i, j\} : f_i \leq j \leq l_i, 1 \leq i \leq n $ on $f_i$ és on comencen els valors no nuls de la fila $i$, i $l_i$ on acaben els valors no nuls de la fila $i$.
 
  \subsection{El mètode}
  
@@ -286,7 +286,7 @@ Doncs, ens quedarien tres vectors:
  
  \subsection{Diccionari de claus}
  
- Conegut també com a \textit{Dictionary of Keys (DOK)}, consisteix en tenir un diccionari que mapeja parelles de (fila, columna) amb el valor de cada element. Els elements que no estan en el diccionari es poden considerar zero. 
+ Conegut també com a \textit{Dictionary of Keys (DOK)}, consisteix en tenir un diccionari que mapeja parelles de (fila, columna) amb el valor de cada element no nul. Els elements que no estan en el diccionari es poden considerar zero. 
  Aquest mètode es bo per construir la matriu de manera incremental en un ordre aleatori, però es dolent al iterar pels elements diferents de zero en un ordre lexicogràfic. El seu ús més habitual es usar aquest format per construir la matriu, per després convertir-la en un format més eficient de processar.
  
  \subsection{Llista de llistes}

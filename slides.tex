@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[8pt]{beamer}
 \usetheme{Ilmenau}
 \usecolortheme{dolphin}
   \usepackage{epsfig}
@@ -13,7 +13,7 @@
   \usepackage{graphicx}
   \usepackage{subcaption}
   \usepackage{float}
-  \usepackage[numbered,framed]{matlab-prettifier}
+  \usepackage{matlab-prettifier}
   \usepackage{pgf, tikz}
   \usetikzlibrary{arrows, automata, positioning}
 
@@ -23,6 +23,8 @@
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\geometry{paperwidth=150mm,paperheight=115mm}
 
 \lstset{frame=tb,
 language=Matlab,
@@ -38,6 +40,8 @@ commentstyle=\color{dkgreen},
 stringstyle=\color{mauve},
 breaklines=true,
 breakatwhitespace=true,
+mlscaleinline=false,
+basicstyle=\tiny,
 tabsize=3,
 extendedchars=true,
 literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{\'i}}1 {ï}{{\"i}}1 {ó}{{\'o}}1 {ò}{{\`o}}1 {ú}{{\'u}}1 {ü}{{\"u}}1 {ç}{{\c{c}}}1
@@ -187,5 +191,247 @@ Així ens quedaran tres vectors:
 Si es canvien files per columnes, dona la implementació per columnes, o també anomenada \textit{Compressed Sparse Columns (CSC)}.
 
 \end{frame}
+
+
+\subsection{Per Perfil}
+\begin{frame}
+  \frametitle{Per Perfil}
+  Aquest mètode és una manera eficient de guardar un tipus concret de matrius, les matrius banda.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Matrius banda}
+  Com vam veure a classe, 
+una matriu $n \times n$ és banda si existeixen $p$ i $q$ naturals, tals que $1< p, q < n$  i $a_{i j} = 0$ sempre que $p \leq j - i$ o $q \leq i-j$. 
+
+Anomenem ample de banda de la matriu a $p + q - 1$.
+
+L'\textbf{envoltant} de una matriu banda consisteix en tots els elements de cada fila des de el primer no nul fins al ultim no nul, incloent els elements nuls que hi pugui haver entre mig.  Aquí la definició formal:
+
+L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) = \{i, j\} : f_i \leq j \leq l_i, 1 \leq i \leq n $ on $f_i$ és on comencen els valors no nuls de la fila $i$, i $l_i$ on acaben els valors no nuls de la fila $i$.
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{El mètode}
+  Consisteix en guardar els elements de l'envoltant de la matriu, la columna on comença l'envoltant en cada fila, i la posició en el vector de valors on comença cada fila.
+ 
+Doncs, ens quedarien tres vectors:
+\begin{itemize}
+	\item \textbf{valors:} amb els valors de l'envoltant.
+	\item \textbf{columnInici:} amb el valor $f_i$ de cada fila (la columna on comença l'envoltant en cada fila.
+	\item \textbf{iniFiles:} amb la posició on comença cada fila en el vector valors.
+\end{itemize}	
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exemple}
+  \[
+ 	\begin{pmatrix}
+		  	1	&	2	& 0	&	0	\\
+		  	0	&	1	&	0	&	0	\\
+		 	0	&	2	&	0	&	2	\\
+		0	&	0	&	0	&	-2	\\
+\end{pmatrix}	 	\qquad = \qquad
+\begin{tabu}{l|c c c c c c c}
+		$Vector$ & \multicolumn{7}{c}{$Coeficients$}\\
+		\hline
+		$índex$			&	1	&	2	&	3	&	4	&	5	&	6	&	7	\\
+		\hline
+		$valors$			&	1	&	2	&	1 &	2	&	0	&	2	&	-2	\\
+		$columnInici$	&	1	&	2	&	2	&	4	&		\\ 	
+		$iniFiles$			& 1	&	3	&	4	&	7 \\
+\end{tabu}    
+ \]
+
+\end{frame}
+
+\subsection{Altres mètodes}
+\begin{frame}
+  \frametitle{Altres mètodes}
+  \begin{itemize}
+    \item \textbf{Diccionari de claus: }Consisteix en mantenir un diccionari que mapeja parelles de (fila, columna) amb el valor de cada element no nul.
+    \item \textbf{Llista de llistes: }Guarda una llista per fila, en la qual cada entrada és una parella de valors (valor, columna).
+    \item \textbf{Esquema DIA: } Aquest esquema s'usa quan els valors no nuls estan restringits a un nombre reduït de diagonals. Consisteix en guardar una matriu de dades que conté els valors no nuls i un vector amb els \textit{offsets}, que guarda el desplaçament de cada diagonal respecte la diagonal principal.
+  \end{itemize}
+\end{frame}
+
+\subsection{Implementació amb Matlab del mètode CSR}
+\begin{frame}
+  \frametitle{Implementació amb Matlab del mètode CSR}
+  Hem implementat un script Matlab amb una classe \texttt{CSRSparseMatrix} que guardi les dades necessàries. Aquestes les tenim en ``l'atribut"\texttt{ Matrix} dins del bloc \texttt{properties} (línia 10 del codi següent). Aquestes dades consisteixen en el següent:	
+\begin{itemize}
+\item  \texttt{Matrix.nColumns}: número de columnes de la matriu, necessari per recrear les files posteriorment.
+\item  \texttt{Matrix.values}: vector valors comentat anteriorment, amb els valors no nuls de la matriu.
+\item  \texttt{Matrix.columns}: vector de columnes, amb la columna corresponent a cada valor amb el mateix índex.
+\item  \texttt{Matrix.beginningRow}: vector amb els índex comença cada fila en el vector de valors i de columnes.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim,allowframebreaks]
+\lstinputlisting[style=Matlab-editor]{report_src/class.m} \end{frame}
+
+\begin{frame}
+  \frametitle{Constructor}
+  \hypertarget{Constructor}{}
+  Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
+\begin{itemize}
+\item \texttt{Matrix.beginningRow[1] = 0}.
+\item \texttt{Matrix.beginningRow[i] = Matrix.beginningRow[i-1]} + elements diferents de zero en la fila i.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim,allowframebreaks]
+  \lstinputlisting[style=Matlab-editor]{report_src/constructor.m}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mètodes per obtenir una fila, una columna i un element}
+  El mètode per obtenir una fila es troba a partir de la línia 6 del codi posterior. Com podem veure consisteix en primer crear una fila amb \texttt{Matrix.nColumns} zeros.
+Llavors, sabent que \texttt{Matrix.beginningRow[i]} ens indica on comença la fila i en el vector de valors i en el de columnes, i deduint que acaben a \texttt{Matrix.beginningRow[i+1]-1}; podem delimitar els elements de la fila. Només quedaria afegir aquests elements a les seves posicions corresponents (usant el vector de columnes).
+
+El mètode per obtenir un element es troba a partir de la línia 22 del codi posterior. Aquest mètode, usa el que hem vist anteriorment per crear la fila determinada, llavors només cal obtenir l'element amb la columna.
+
+El mètode per obtenir una columna es troba a partir de la línia 32 del codi posterior. Sabent quantes files tenim (recordem que \texttt{Matrix.beginningRow} té $m+1$ elements, on $m$ és el nombre de files de la matriu), inicialitzem cada element a 0 i busquem els elements de cada posició de la columna, usant el mateix mètode usat per obtenir les files. Cal tenir en compte, que per cada fila, les columnes estan ordenades, així que no cal buscar més quan ja hem passat la columna que estem mirant.  
+\end{frame}
+
+\begin{frame}[containsverbatim,allowframebreaks]
+  \lstinputlisting[style=Matlab-editor]{report_src/getRow.m}  
+\end{frame}
+
+\begin{frame}[containsverbatim,allowframebreaks]
+  \lstinputlisting[style=Matlab-editor]{report_src/getElem.m}  
+\end{frame}
+
+
+\begin{frame}[containsverbatim,allowframebreaks]
+  \lstinputlisting[style=Matlab-editor]{report_src/getColumn.m}  
+\end{frame}
   
+\section{Operacions amb matrius disperses}
+\subsection[Afegir Fila]{Mètode per afegir una fila a una matriu dispersa}
+\begin{frame}
+  \frametitle{Mètode per afegir una fila a una matriu dispersa}
+  
+  Aquest mètode està pensat per construir les matrius de forma incremental, cosa que ens serà molt útil per fer les operacions posteriors.
+  
+  El mètode en sí consisteix en fer exactament el mateix que fa el \hyperlink{Constructor}{constructor} per cada fila, per la donada per paràmetre en el mètode. 
+\end{frame}
+
+
+\begin{frame}[containsverbatim,allowframebreaks]
+\lstinputlisting[style=Matlab-editor]{report_src/addRow.m}
+\end{frame}
+
+\subsection[Suma]{Mètode per sumar dues matrius disperses}
+\begin{frame}
+  \frametitle{Mètode per sumar dues matrius disperses}
+  Per sumar dues matrius disperses sense carregar tota la matriu en memòria sumem fila per fila i ho afegim a una nova matriu dispersa resultat.
+\end{frame}
+
+\begin{frame}[containsverbatim,allowframebreaks]
+\lstinputlisting[style=Matlab-editor]{report_src/sum.m}
+\end{frame}
+
+
+\subsection[Producte amb vectors]{adfasd}
+\begin{frame}
+  \frametitle{Mètodes pel producte matriu-vector}
+  Aquest apartat es dividirà en dos mètodes: 
+  \begin{itemize}
+  \item El producte d'un vector per una matriu.
+  \item El producte d'una matriu per un vector.
+  \end{itemize}
+\end{frame}
+
+\subsubsection[Vector-matriu]{Producte d'un vector per una matriu}
+\begin{frame}
+  \frametitle{Producte d'un vector per una matriu}  
+  Consisteix en la multiplicació $c = b \times A$, on A és una matriu $m \times n$, b és un vector de mida $m$ i c és un vector de mida $n$.
+
+El resultat d'aquesta operació, es pot representar així, pel cas que $m = 2$ i $n = 3$:
+
+ \[
+ 	\begin{bmatrix}
+		  	c_1	&	c_2	& c_3	\\
+\end{bmatrix} = 
+ 	\begin{bmatrix}
+		  	b_1	&	b_2	\\
+\end{bmatrix}
+ 	\begin{pmatrix}
+		  	a_{11}	&	a_{12} & a_{13}\\
+		  	a_{21}	&	a_{22} & a_{23}\\
+\end{pmatrix}
+\qquad \longrightarrow \qquad
+ \begin{matrix} 
+ c_1 = b_1 a_{11} + b_2 a_{21} \\
+ c_2 = b_1 a_{12} + b_2 a_{22} \\
+ c_3 = b_1 a_{13} + b_2 a_{23} \\
+ \end{matrix}
+ \]
+
+Això es podria generalitzar de la següent manera:
+
+\[
+ c_j = \sum_{i=1}^{m} b_i a_{ij}
+\]
+
+Amb aquesta formula, la implementació es simplifica bastant: nomes cal aplicar-la per a cada columna $j$, quedant un doble bucle, com es pot veure en el codi a continuació:
+
+\end{frame}
+
+\begin{frame}[containsverbatim,allowframebreaks]
+  \lstinputlisting[style=Matlab-editor]{report_src/multRow.m}
+\end{frame}
+\subsubsection[Matriu-vector]{Producte d'una matriu per un vector}
+\begin{frame}
+\frametitle{Producte d'una matriu per un vector}
+Consisteix en la multiplicació $c = A \times b$, on A és una matriu $m \times n$, b és un vector de mida $n$ i c és un vector de mida $m$.
+
+En aquest cas el que fem és cada fila $i$ de la matriu, i la multipliquem per b. El resultat el guardem a $c_i$.
+\end{frame}
+
+\begin{frame}[containsverbatim,allowframebreaks]
+  \lstinputlisting[style=Matlab-editor]{report_src/multColumn.m}
+\end{frame}
+
+\subsection[Multiplicació]{Mètode per multiplicar dues matrius}
+\begin{frame}
+  \frametitle{Mètode per multiplicar dues matrius}
+
+Consisteix en la multiplicació de $C = A \times B$, on $A$ és una matriu $m \times n$ i $B$ és una matriu $n \times o$, resultant en la matriu $C$ que és de mida $m \times o$. 
+
+Aquesta operació la podem representar simbolicament de la següent manera per a $m = 2, n = 3, o = 2$: 
+
+\[
+\begin{pmatrix}
+		  	c_{11}	&	c_{12}	\\
+		  	c_{21}	&	c_{22}	\\
+\end{pmatrix} = 
+\begin{pmatrix}
+		  	a_{11}	&	a_{12} & a_{13}\\
+		  	a_{21}	&	a_{22} & a_{23}\\
+\end{pmatrix} \times
+\begin{pmatrix}
+		  	b_{11}	&	b_{12}	\\
+		  	b_{21}	&	b_{22}	\\
+		  	b_{31}	&	b_{32}	\\
+\end{pmatrix} \qquad \longrightarrow \qquad
+\begin{matrix} 
+c_{11} = a_{11}b_{11} + a_{12}b_{21} + a_{13}b_{31} \\
+c_{12} = a_{11}b_{12} + a_{12}b_{22} + a_{13}b_{32} \\
+c_{21} = a_{21}b_{11} + a_{22}b_{21} + a_{23}b_{31}	\\
+c_{22} = a_{21}b_{12} + a_{22}b_{22} + a_{23}b_{32} \\
+\end{matrix}
+\]
+
+Amb això podem veure com hi ha un patró semblant al vist en la multiplicació vector per matriu. Cada fila $i$ de $C$ és igual a la multiplicació de la fila $i$ de $A$ per la matriu $B$. Per tant podem fer que en la implementació, per cada fila $i$ de la matriu $C$, obtenir la fila $i$ de $A$ i fer $A_i \times B$ usant el mètode implementat anteriorment.
+\end{frame}
+
+\begin{frame}[containsverbatim,allowframebreaks]
+  \lstinputlisting[style=Matlab-editor]{report_src/mtimes.m}
+\end{frame}
+
+    
 \end{document}

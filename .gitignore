@@ -14,5 +14,7 @@ slides.out
 slides.snm
 slides.synctex.gz
 slides.toc
-
+slides.fdb_latexmk
+slides.fls
+slides.vrb
 
