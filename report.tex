@@ -430,7 +430,7 @@ Amb això podem veure com hi ha un patró semblant al vist en la multiplicació 
 
 \section{Introducció}
 
-Per resoldre un sistema d'equacions representat amb una matriu dispersa podriem usar qualsevol dels mètodes que coneixem per resoldre matrius, però ens trobariem fent un nombre molt gran d'operacions innecessàries i gastant molta més memòria de la necessària. \newline
+Per resoldre un sistema d'equacions representat amb una matriu dispersa podríem usar qualsevol dels mètodes que coneixem per resoldre matrius, però ens trobariem fent un nombre molt gran d'operacions innecessàries i gastant molta més memòria de la necessària. \newline
 
 Suposem que apliquem el mètode de Gauss en una matriu dispersa, podem veure marcats en vermell tots els elements no nuls que hem introduit al aplicar Gauss (elements \textit{fill-in}):
 
@@ -752,28 +752,31 @@ x	&	x	&	x	&	0	&	0	\\
 \subsection{General}
 
 Representar una matriu en forma dispersa ens permetrà estalviar espai de memòria respecte a la seva versió densa.
-Podriem dir que l'espai de memòria que ocupa una matriu densa seria donat per la formula $E=C^n$ on $E$ seria el nombre d'elements a guardar, $C$ seria el tamany del costat, i $n$ seria el seu número de dimensions.
+Podríem dir que l'espai de memòria que ocupa una matriu densa seria donat per la formula $E=C^n$ on $E$ seria el nombre d'elements a guardar, $C$ seria el tamany del costat, i $n$ seria el seu número de dimensions.
 De la mateixa forma, podríem definir el tamany mínim que ocupa una matriu dispersa com a $E=(C^n)-X$ on $E$ seria el nombre d'elements a guardar, $C$ seria el tamany del costat, $n$ seria el seu número de dimensions i $X$ seria el nombre d'elements de la matriu iguals a zero.
 
 
-Per exemple, amb una matriu diagonal de 10000x10000, en forma densa tindria 100000000 elements, i en forma dispersa podria arribar a ocupar només 10000 elements.
+Per exemple, amb una matriu diagonal de $10000 \times 10000$, en forma densa tindria $100000000$ elements, i en forma dispersa podria arribar a ocupar només $10000$ elements.
 \subsubsection{Per coordenades}
 
-Utilitzant el mètode de representació per coordenades, podriem calcular el nombre d'elements a guardar amb la formula $E=((C^n)-X)*(n+1)$.
-Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia tant sols 30000 elements.
+Utilitzant el mètode de representació per coordenades, podríem calcular el nombre d'elements a guardar amb la formula $E=((C^n)-X)*(n+1)$.
+Per exemple, amb una matriu diagonal de $10000 \times 10000$, utilitzant la representació per coordenades ocuparia tant sols $30000$ elements.
 
 \subsubsection{Per files}
 
-Utilitzant el mètode de representació per files, podriem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)*3+1$.
-Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia 30001 elements. No obstant, si la matriu tingués més elements
+Utilitzant el mètode de representació per files, podríem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)*2+C+1$.
+Per exemple, amb una matriu diagonal de $10000 \times 10000$, utilitzant la representació per coordenades ocuparia $30001$ elements. No obstant, si la matriu tingués més elements
 escalaria millor que usant el mètode de coordenades.
 
 \subsubsection{Per perfil}
 
-Utilitzant el mètode de representació per perfil, podriem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)+numIndexos+C+1$.
-Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia $20001+numIndexos$ elements. Com podem veure, aquest mètode ens depèn de la quantita de valors a prop de la diagonal, i ens podria ser útil per a matrius banda
+Utilitzant el mètode de representació per perfil, podríem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)+numIndexos+C+1$.
+Per exemple, amb una matriu diagonal de $10000 \times 10000$, utilitzant la representació per coordenades ocuparia $20001+numIndexos$ elements. Com ja hem explicat anteriorment, aquest mètode depèn de la quantitat de valors a prop de la diagonal, i és molt útil per a matrius banda.
 
 \section{Temps}
+
+\subsection{General}
+
 
 
 %http://www.jldelafuenteoconnor.es/Clase_dispersa_2018.pdf
