@@ -88,7 +88,7 @@ literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{
 
 Una matriu $n \times n$ serà dispersa si el número de coeficients no nuls es $n^{\gamma+1}$, on $\gamma < 1$.
 
-En funció del problema, decidim el valor del paràmetre $\gamma$. Aquí hi ha els valors típics de $\gamma$:]
+En funció del problema, decidim el valor del paràmetre $\gamma$. Aquí hi ha els valors típics de $\gamma$:
 \begin{itemize}
 \item $\gamma=0.2$ per problemes d'anàlisi de sistemes elèctrics de generació i de transport d'energia.
 \item $\gamma=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructures.
@@ -219,7 +219,7 @@ L'envoltant de una matriu banda A, $env(A)$ es defineix com el conjunt $env(A) =
 Doncs, ens quedarien tres vectors:
 \begin{itemize}
 	\item \textbf{valors:} amb els valors de l'envoltant.
-	\item \textbf{columnInici:} amb el valor $f_i$ de cada fila (la columna on comença l'envoltant en cada fila.
+	\item \textbf{columnInici:} amb el valor $f_i$ de cada fila (la columna on comença l'envoltant en cada fila).
 	\item \textbf{iniFiles:} amb la posició on comença cada fila en el vector valors.
 \end{itemize}	
 \end{frame}
@@ -274,7 +274,7 @@ Doncs, ens quedarien tres vectors:
 \begin{frame}
   \frametitle{Constructor}
   \hypertarget{Constructor}{}
-  Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
+  Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Farem el següent:
 \begin{itemize}
 \item \texttt{Matrix.beginningRow[1] = 0}.
 \item \texttt{Matrix.beginningRow[i] = Matrix.beginningRow[i-1]} + elements diferents de zero en la fila i.
