@@ -1,4 +1,4 @@
- %============multColumn=====================================================
+%============multColumn=====================================================
 %
 %%% Donats obj i un vector de la mateixa mida que les files de obj
 %%%% retorna el resultat de la multiplicació obj*b
