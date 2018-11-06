@@ -210,7 +210,7 @@ Hem implementat un script Matlab amb una classe \texttt{CSRSparseMatrix} que gua
 
 \subsubsection{Constructor}
 \label{sec:Constructor}
-Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Per fer-ho seguim el següent:
+Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem d'actualitzar el vector d'índexs de files. Seguirem els següents passos:
 \begin{itemize}
 \item \texttt{Matrix.beginningRow[1] = 0}.
 \item \texttt{Matrix.beginningRow[i] = Matrix.beginningRow[i-1]} + elements diferents de zero en la fila i.
