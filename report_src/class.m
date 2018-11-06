@@ -1,10 +1,6 @@
 %===============CSRSparseMatrix=================================================
 % Classe que implementa el mètode d'emmagatzematge per files sobre matrius 
 %%% disperses
-%
-% El constructor rep una matriu i hi aplica el metode, tornant un objecte
-%%% de tipus CSRSparseMatrix.
-%
 classdef CSRSparseMatrix
   properties
     Matrix 
