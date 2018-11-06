@@ -101,17 +101,16 @@ literate={á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {í}{{
 
 \chapter{Què són les matrius disperses?}
 
-Quan parlem de matrius disperses ens referim a matrius de gran tamany en la qual la majoria d'elements son zero. Direm que 
-una matriu és disperrsa, quan hi hagi benefici en aplicar els mètodes propis d'aquestes. 
+Quan parlem de matrius disperses ens referim a matrius de gran tamany en la qual la majoria d'elements son zero. Direm que una matriu és dispersa, quan hi hagi benefici en aplicar els mètodes propis d'aquestes. 
 
-Per identificar si una matriu és dispersa, podem usar el seguent:
+Per identificar si una matriu és dispersa, podem usar el següent:
 
 \qquad Una matriu $n \times n$ serà dispersa si el número de coeficients no nuls es $n^{\gamma+1}$, on $\gamma < 1$.
 
-En funció del poblema, decidim el valor del paràmetre $\gamma$. Aquí hi ha els valors típics de $\gamma$:
+En funció del problema, decidim el valor del paràmetre $\gamma$. Aquí hi ha els valors típics de $\gamma$:
 \begin{itemize}
-\item $\gamma=0.2$ per problemes d'anàlisi de sistemes eléctics degeneració i de transpot d'enegía.
-\item $\gamma=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructues.
+\item $\gamma=0.2$ per problemes d'anàlisi de sistemes elèctrics de generació i de transport d'energia.
+\item $\gamma=0.5$ per matrius en bandes associades a problemes d'anàlisi d'estructures.
 \end {itemize}
 
 
@@ -378,7 +377,7 @@ Això es podria generalitzar de la següent manera:
  c_j = \sum_{i=1}^{m} b_i a_{ij}
 \]
 
-Amb aquesta formula, la implementació es simplifica bastant: nomes cal aplicar-la per a cada columna $j$, quedant un doble bucle, com es pot veure en el codi a continuació:
+Amb aquesta formula, la implementació es simplifica bastant: només cal aplicar-la per a cada columna $j$, quedant un doble bucle, com es pot veure en el codi a continuació:
 
 \paragraph*{Script Matlab} \mbox{} \\
 \lstinputlisting[style=Matlab-editor]{report_src/multRow.m}
@@ -397,7 +396,7 @@ En aquest cas el que fem és cada fila $i$ de la matriu, i la multipliquem per b
 
 Consisteix en la multiplicació de $C = A \times B$, on $A$ és una matriu $m \times n$ i $B$ és una matriu $n \times o$, resultant en la matriu $C$ que és de mida $m \times o$. 
 
-Aquesta operació la podem representar simbolicament de la següent manera per a $m = 2, n = 3, o = 2$: 
+Aquesta operació la podem representar simbòlicament de la següent manera per a $m = 2, n = 3, o = 2$: 
 
 \[
 \begin{pmatrix}
@@ -430,9 +429,9 @@ Amb això podem veure com hi ha un patró semblant al vist en la multiplicació 
 
 \section{Introducció}
 
-Per resoldre un sistema d'equacions representat amb una matriu dispersa podriem usar qualsevol dels mètodes que coneixem per resoldre matrius, però ens trobariem fent un nombre molt gran d'operacions innecessàries i gastant molta més memòria de la necessària. \newline
+Per resoldre un sistema d'equacions representat amb una matriu dispersa podríem usar qualsevol dels mètodes que coneixem per resoldre matrius, però ens trobaríem fent un nombre molt gran d'operacions innecessàries i gastant molta més memòria de la necessària. \newline
 
-Suposem que apliquem el mètode de Gauss en una matriu dispersa, podem veure marcats en vermell tots els elements no nuls que hem introduit al aplicar Gauss (elements \textit{fill-in}):
+Suposem que apliquem el mètode de Gauss en una matriu dispersa, podem veure marcats en vermell tots els elements no nuls que hem introduït al aplicar Gauss (elements \textit{fill-in}):
 
 \[
 \begin{pmatrix}
@@ -474,7 +473,7 @@ Per saber-ho fem una representació simbòlica de com és la matriu d'equacions.
 
 \subsection{Mètodes de reordenació}
 
-Com hem vist amb anterioritat, reordenar les matrius de forma correcta és de vital importància, presentant tres millores fundamentals:
+Com hem vist amb anterioritat, reordenar les matrius de forma correcta és de vital importància, presentant tres millores fonamentals:
 
 \begin{itemize}
 	\item La disminució de la memòria necessària per emmagatzemar la matriu generada en el procés de factorització.
@@ -589,7 +588,7 @@ Si el sistema no presenta una estructura de dispersió especial, i tampoc ens in
 
 Per fer-ho s'usa el criteri de Markowitz, de Harry Max Markowitz.
 
-Consisteix en factoritzar la matriu mitjançant l'eliminació de Gauss amb pivotació, triant com a element pivot en una etapa $k$ un $a_{ij}^k$ numèricament acceptable i que minimitzi $(r_i^k - 1)(c_i^k - 1)$, on $r_i^k$ és el numero de coeficients no zero en la fila $i$ de la sub-matriu activa i $c_i^k$ els no nuls en la columna $j$.
+Consisteix en factoritzar la matriu mitjançant l'eliminació de Gauss amb pivotatge, triant com a element pivot en una etapa $k$ un $a_{ij}^k$ numèricament acceptable i que minimitzi $(r_i^k - 1)(c_i^k - 1)$, on $r_i^k$ és el numero de coeficients no zero en la fila $i$ de la sub-matriu activa i $c_i^k$ els no nuls en la columna $j$.
 
 \subsubsection{Estructura triangular en blocs}
 
@@ -605,7 +604,7 @@ Amb la transversal completa, pot reordenar-se la matriu utilitzant permutacions 
 
 \begin{itemize}
 \item Si per una matriu $A$ existeix una estructura triangular inferior en blocs, en direm matriu reductible.\\
-\item Si una matriu no té transversal completa, però pot reordenar-se de tal forma que en tingui i, un cop reordenada, continuï siguent reductible, en direm birreductible.
+\item Si una matriu no té transversal completa, però pot reordenar-se de tal forma que en tingui i, un cop reordenada, continuï sent reductible, en direm birreductible.
 \end{itemize}
 
 \paragraph{Transversal completa} \mbox{}
@@ -626,7 +625,7 @@ En la iteració $it$, es poden donar 3 casos:
 \end{itemize}
 \item Que només existeixin coeficients no nuls en la sub-matriu activa\footnotemark[\value{footnote}]
 \begin{itemize}
-\item Mitjançant el mètode del cami creixent es pot aconseguir co\l.locar un coeficient diferent de zero a $a_{it it}$. Si es donés el cas que no existís aquest camí, voldria dir que la matriu és singular.
+\item Mitjançant el mètode del camí creixent es pot aconseguir co\l.locar un coeficient diferent de zero a $a_{it it}$. Si es donés el cas que no existís aquest camí, voldria dir que la matriu és singular.
 \end{itemize}
 \end{itemize}
 
@@ -759,19 +758,19 @@ De la mateixa forma, podríem definir el tamany mínim que ocupa una matriu disp
 Per exemple, amb una matriu diagonal de 10000x10000, en forma densa tindria 100000000 elements, i en forma dispersa podria arribar a ocupar només 10000 elements.
 \subsubsection{Per coordenades}
 
-Utilitzant el mètode de representació per coordenades, podriem calcular el nombre d'elements a guardar amb la formula $E=((C^n)-X)*(n+1)$.
+Utilitzant el mètode de representació per coordenades, podríem calcular el nombre d'elements a guardar amb la formula $E=((C^n)-X)*(n+1)$.
 Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia tant sols 30000 elements.
 
 \subsubsection{Per files}
 
-Utilitzant el mètode de representació per files, podriem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)*3+1$.
+Utilitzant el mètode de representació per files, podríem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)*3+1$.
 Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia 30001 elements. No obstant, si la matriu tingués més elements
 escalaria millor que usant el mètode de coordenades.
 
 \subsubsection{Per perfil}
 
-Utilitzant el mètode de representació per perfil, podriem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)+numIndexos+C+1$.
-Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia $20001+numIndexos$ elements. Com podem veure, aquest mètode ens depèn de la quantita de valors a prop de la diagonal, i ens podria ser útil per a matrius banda
+Utilitzant el mètode de representació per perfil, podríem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)+numIndexos+C+1$.
+Per exemple, amb una matriu diagonal de 10000x10000, utilitzant la representació per coordenades ocuparia $20001+numIndexos$ elements. Com podem veure, aquest mètode ens depèn de la quantitat de valors a prop de la diagonal, i ens podria ser útil per a matrius banda
 
 \section{Temps}
 
