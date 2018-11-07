@@ -744,8 +744,8 @@ x	&	x	&	x	&	0	&	0	\\
 
 La factorització LU és el procés de descomposar una matriu $A$ en dues matrius $L$ i $U$ tal que $A = LU$ on $L$ sigui una matriu trinagular inferior i $U$ una matriu triangular superior.
 
-Utilitzant el mètode de Gauss per a resoldre el sistema d'equacions tindria un ordre de complexitat de $O(n^3)$, mentre que amb la factorització LU tenim un problema d'ordre $O(n^2)$ un cop aconseguides les matrius LU. En aquest cost, però, no estem tinguent en compte el cost d'obtenir les matrius L i U, i per tant, hem de tenir en compte que amb matrius de petita mida ens podria ser més ràpid seguir usant altres mètodes.
-És només quan tenim matrius de gran tamany, i hem de resoldre el sistem d'equacions per a diverses $b$ que ens sortirà a compte fer el procés de factorització.
+Utilitzar el mètode de Gauss per resoldre el sistema d'equacions tindria un ordre de complexitat de $O(n^3)$, mentre que amb la factorització LU tenim un problema d'ordre $O(n^2)$ un cop aconseguides les matrius LU. En aquest cost, però, no estem tinguent en compte el cost d'obtenir les matrius L i U, i per tant, hem de tenir en compte que amb matrius de petita mida ens podria ser més ràpid seguir usant altres mètodes.
+És només quan tenim matrius de gran tamany, i hem de resoldre el sistema d'equacions per a diverses $b$ que ens sortirà a compte fer el procés de factorització.
 
 Donat que $LU = A$, podriem definir l'equació $LUx = b$ on $x$ és la solució al sistema, i $b$ és el vector de termes independents.
 
@@ -819,7 +819,7 @@ Per tal de reduir la variança dels nostres resultats, hem executat cada operaci
 
 Veient els temps per iteració podem observar que la nostre implementació segueix de matrius disperses és inclús més lenta que la implementació de matrius denses de matlab. En la suma de matrius ha tardat 10000 cops més per iteració, i en la multiplicació ha costat 31 minuts fer una sola iteració.
 Tot i que no hem trobat els detalls de la implementació que usa matlab, podem assumir que la implementació interna de les matrius a matlab està feta en un llenguatge a nivell baix, tipus C o C++, enlloc d'usar el propi llenguatge de matlab.
-També podria ser que usessin tècniques SIMD o fessin les operacions a la GPU.
+També podria ser que usessin instruccions SIMD per tal de millorar el rendiment.
 
 Tot i així, observant els resultats de la propia implementació de matrius disperses de Matlab podem veure que és molt més eficient que tractant la matriu com a una matriu normal.
 En la suma de matrius veiem una millora del 271\%, però la diferència més important s'observa en la multiplicació, on podem veure una diferència del 2500\%.
@@ -872,6 +872,14 @@ En la suma de matrius veiem una millora del 271\%, però la diferència més imp
     \bibitem{matlab-overloading}
     \textit{MathWorks: Operator Overloading}
     \\\texttt{\url{https://es.mathworks.com/help/matlab/matlab_oop/implementing-operators-for-your-class.html}}
+
+    \bibitem{sparse-LU}
+    Kristin Davies,
+    Peter He,
+    Feng Xie,
+    Hamid Ghaffari  
+    \textit{Sparse Linear Algebra:LU Factorization}
+    \\\texttt{\url{http://www.cas.mcmaster.ca/~cs777/presentations/LU-factorization.pdf}}
 
     
 

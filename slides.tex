@@ -784,5 +784,106 @@ x	&	x	&	x	&	0	&	0	\\
 \end{bmatrix}
     \]    
 \end{frame}
+
+\section{Factorització LU de matrius}
+\begin{frame}
+  \frametitle{Factorització LU de matrius}
+La factorització LU és el procés de descomposar una matriu $A$ en dues matrius $L$ i $U$ tal que $A = LU$ on $L$ sigui una matriu trinagular inferior i $U$ una matriu triangular superior.
+
+Utilitzar el mètode de Gauss per resoldre el sistema d'equacions tindria un ordre de complexitat de $O(n^3)$, mentre que amb la factorització LU tenim un problema d'ordre $O(n^2)$ un cop aconseguides les matrius LU. En aquest cost, però, no estem tinguent en compte el cost d'obtenir les matrius L i U, i per tant, hem de tenir en compte que amb matrius de petita mida ens podria ser més ràpid seguir usant altres mètodes.
+És només quan tenim matrius de gran tamany, i hem de resoldre el sistema d'equacions per a diverses $b$ que ens sortirà a compte fer el procés de factorització.
+\end{frame}
+\begin{frame}
+  \frametitle{Factorització LU de matrius}
+  \framesubtitle{Usos}
+Donat que $LU = A$, podriem definir l'equació $LUx = b$ on $x$ és la solució al sistema, i $b$ és el vector de termes independents.
+
+La factorització LU s'utilitza molt sovint en computació per solucionar repetidament sistemes d'equacions amb diferents termes independents.
+Una de les altres aplicacions és la de trobar el determinant de la matriu original $A$. Donat que $A = LU$, podem assumir que $det(A) = det(LU) = det(L) * det(U)$. Aprofitant els 0s de cada matriu triangular podem trobar de manera molt més ràpida els seus determinants.
+
+\end{frame}
+\section{Estalvi de rendiment i espai.}
+
+\subsection{Espai}
+
+\subsubsection{General}
+
+\begin{frame}
+  \frametitle{Estalvi d'espai}
+Representar una matriu en forma dispersa ens permetrà estalviar espai de memòria respecte a la seva versió densa.
+Podríem dir que l'espai de memòria que ocupa una matriu densa seria donat per la formula $E=C^n$ on $E$ seria el nombre d'elements a guardar, $C$ seria el tamany del costat, i $n$ seria el seu número de dimensions.
+De la mateixa forma, podríem definir el tamany mínim que ocupa una matriu dispersa com a $E=(C^n)-X$ on $E$ seria el nombre d'elements a guardar, $C$ seria el tamany del costat, $n$ seria el seu número de dimensions i $X$ seria el nombre d'elements de la matriu iguals a zero.
+\end{frame}
+\begin{frame}
+  \frametitle{Estalvi d'espai}
+  \framesubtitle{Exemples}
+Per exemple, amb una matriu diagonal de $10000 \times 10000$, en forma densa tindria $100000000$ elements, i en forma dispersa podria arribar a ocupar només $10000$ elements. \\
+\subsubsection{Per coordenades}
+
+Utilitzant el mètode de representació per coordenades, podríem calcular el nombre d'elements a guardar amb la formula $E=((C^n)-X)*(n+1)$.
+Per exemple, amb una matriu diagonal de $10000 \times 10000$, utilitzant la representació per coordenades ocuparia tant sols $30000$ elements. \\
+
+\subsubsection{Per files}
+
+Utilitzant el mètode de representació per files, podríem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)*2+C+1$.
+Per exemple, amb una matriu diagonal de $10000 \times 10000$, utilitzant la representació per coordenades ocuparia $30001$ elements. No obstant, si la matriu tingués més elements
+escalaria millor que usant el mètode de coordenades. \\
+
+\subsubsection{Per perfil}
+
+Utilitzant el mètode de representació per perfil, podríem calcular el nombre d'elements a guardar en una matriu quadrada  amb la formula $E=((C^2)-X)+numIndexos+C+1$.
+Per exemple, amb una matriu diagonal de $10000 \times 10000$, utilitzant la representació per coordenades ocuparia $20001+numIndexos$ elements. Com ja hem explicat anteriorment, aquest mètode depèn de la quantitat de valors a prop de la diagonal, i és molt útil per a matrius banda. \\
+\end{frame}
+\subsection{Temps}
+
+\subsubsection{Introducció}
+\begin{frame}
+  \frametitle{Estalvi de temps}
+Per tal de mesurar i comparar les diferències de rendiment entre la nostre implementació de matrius disperses i la implementació de matrius denses del matlab, crearem una matriu de $1000 \times 1000$ elements,
+on al voltant d'un 95\% dels elements seran buits. \\
+Un cop creada la matriu procedirem a mesurar el temps que tarden les operacions de suma i multiplicació amb una altre matriu d'iguals característiques. 
+Per tal de reduir la variança dels nostres resultats, hem executat cada operació 10 cops seguits i n'hem fet la mitjana aritmètica, als seguents apartats tenim els resultats obtinguts.
+\end{frame}
+\subsubsection{Suma de matrius}
+\begin{frame}
+  \frametitle{Estalvi de temps}
+  \framesubtitle{Resultats}
+\begin{center}
+    \begin{tabular}{| l | c| c | c |}
+      \hline
+       & Iteracions & Temps total & Temps per iteració \\ \hline
+
+      Implementació dispersa & 10 & 104.52s & 10.45s \\ \hline
+       Matlab densa & 10000 & 10.37s & 1.03ms \\ \hline
+       Matlab sparse & 10000 & 3.88s & 0.38ms \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+\subsubsection{Multiplicació de matrius}
+
+\begin{center}
+    \begin{tabular}{| l | c| c | c |}
+      \hline
+       & Iteracions & Temps total & Temps per iteració \\ \hline
+
+      Implementació dispersa & 1 & 1873s & 1873s \\ \hline
+       Matlab densa & 100 & 64.62s & 646.2ms \\ \hline
+       Matlab sparse & 1000 & 25.72s & 25.72ms \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+\subsubsection{Conclusions}
+\begin{frame}
+  \frametitle{Estalvi de temps}
+  \framesubtitle{Conclusions}
+Veient els temps per iteració podem observar que la nostre implementació segueix de matrius disperses és inclús més lenta que la implementació de matrius denses de matlab. En la suma de matrius ha tardat 10000 cops més per iteració, i en la multiplicació ha costat 31 minuts fer una sola iteració.
+Tot i que no hem trobat els detalls de la implementació que usa matlab, podem assumir que la implementació interna de les matrius a matlab està feta en un llenguatge a nivell baix, tipus C o C++, enlloc d'usar el propi llenguatge de matlab.\\ 
+També podria ser que usessin instruccions SIMD per tal de millorar el rendiment. \\
+
+Tot i així, observant els resultats de la propia implementació de matrius disperses de Matlab podem veure que és molt més eficient que tractant la matriu com a una matriu normal.
+En la suma de matrius veiem una millora del 271\%, però la diferència més important s'observa en la multiplicació, on podem veure una diferència del 2500\%.
+\end{frame}
     
 \end{document}
