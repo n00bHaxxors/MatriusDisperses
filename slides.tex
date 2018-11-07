@@ -276,7 +276,7 @@ Doncs, ens quedarien tres vectors:
   \hypertarget{Constructor}{}
   Entenent com s'emmagatzema la matriu, fer el constructor de la classe és trivial: només és necessari recórrer la matriu per files i guardar al vector de valors els elements diferents de 0, guardar-nos la columna on es troba cada un d'aquests elements en el vector de columnes. A part, per cada fila, hem de actualitzar el vector d'índexs de files. Farem el següent:
 \begin{itemize}
-\item \texttt{Matrix.beginningRow[1] = 0}.
+\item \texttt{Matrix.beginningRow[1] = 1}.
 \item \texttt{Matrix.beginningRow[i] = Matrix.beginningRow[i-1]} + elements diferents de zero en la fila i.
 \end{itemize}
 \end{frame}
