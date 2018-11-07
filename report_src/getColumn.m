@@ -5,8 +5,8 @@
 %
 function column = getColumn(obj, y)
   column = 0;
-  m=size(obj.Matrix.beginningRow,2)-1;
-  for j=1:m
+  nFiles=size(obj.Matrix.beginningRow,2)-1;
+  for j=1:nFiles
     column(j)=0;
     for i=obj.Matrix.beginningRow(j):obj.Matrix.beginningRow(j+1)-1
       if obj.Matrix.columns(i)==y 
